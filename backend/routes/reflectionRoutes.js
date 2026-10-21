@@ -5,6 +5,7 @@ import axios from 'axios';
 import fs from 'fs';
 import Reflection from '../models/Reflection.js';
 import AnalysisResult from '../models/AnalysisResult.js';
+import { requireActivityAuth as requireAuth } from '../middleware/activityAuth.js';
 
 const router = express.Router();
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://127.0.0.1:8000';
@@ -136,10 +137,11 @@ router.post('/transcribe', upload.single('audio'), async (req, res) => {
   }
 });
 
-router.post('/confirm-voice', async (req, res) => {
+router.post('/confirm-voice', requireAuth, async (req, res) => {
   try {
+    // Owner comes from the signed session token, never from the request body.
+    const userId = req.activityUserId;
     const {
-      userId,
       transcript,
       language = 'auto',
       language_probability,
@@ -221,9 +223,9 @@ router.post('/confirm-voice', async (req, res) => {
   }
 });
 
-router.post('/', upload.single('audio'), async (req, res) => {
+router.post('/', requireAuth, upload.single('audio'), async (req, res) => {
   try {
-    const { userId } = req.body;
+    const userId = req.activityUserId;
     const file = req.file;
     const rawText = req.body.text || req.body.content || req.body.transcript;
 
@@ -452,9 +454,10 @@ router.post('/', upload.single('audio'), async (req, res) => {
   }
 });
 
-router.get('/', async (req, res) => {
+router.get('/', requireAuth, async (req, res) => {
   try {
-    const reflections = await Reflection.find().sort({ createdAt: -1 }).lean();
+    // Only the signed-in user's own reflections.
+    const reflections = await Reflection.find({ userId: req.activityUserId }).sort({ createdAt: -1 }).lean();
     
     const reflectionsWithAnalysis = await Promise.all(
       reflections.map(async (ref) => {

@@ -76,6 +76,10 @@ const startServer = async () => {
       console.log('MONGO_URI not set. Starting backend without a database connection.');
     }
 
+    if (!process.env.AUTH_TOKEN_SECRET) {
+      console.warn('AUTH_TOKEN_SECRET not set. Using a random secret, so every restart signs all users out. Set it in the host environment.');
+    }
+
     app.listen(PORT, () => {
       console.log(`Server running on http://localhost:${PORT}`);
     });

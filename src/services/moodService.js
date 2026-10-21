@@ -17,9 +17,21 @@ const normalizeEntry = (entry) => ({
   suggestedActivity: entry.suggestedActivity || null,
 });
 
+// History is per-user: the backend identifies the owner from the session token.
+const authHeaders = () => {
+  try {
+    const token = JSON.parse(localStorage.getItem('mindcare_user_data') || 'null')?.token;
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  } catch {
+    return {};
+  }
+};
+
 export async function fetchMoodEntries() {
   try {
-    const res = await fetch(`${API_BASE_URL}/api/reflections`);
+    const res = await fetch(`${API_BASE_URL}/api/reflections`, { headers: authHeaders() });
+    // Signed out or session expired: show no history rather than someone else's or mock data.
+    if (res.status === 401) return [];
     if (!res.ok) throw new Error('Unable to fetch reflections');
     const data = await res.json();
     return Array.isArray(data) ? data.map(normalizeEntry) : [];
@@ -34,9 +46,8 @@ export async function saveMoodEntry(entry) {
   try {
     const res = await fetch(`${API_BASE_URL}/api/reflections`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...authHeaders() },
       body: JSON.stringify({
-        userId: 'demo_user',
         type: 'text',
         content: entry.transcript || entry.note || '',
         transcript: entry.transcript || entry.note || '',

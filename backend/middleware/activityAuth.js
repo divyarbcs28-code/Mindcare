@@ -9,7 +9,7 @@ export function issueToken(userId) {
 }
 export function requireActivityAuth(req, res, next) {
   const [payload, signature] = (req.headers.authorization || '').replace(/^Bearer\s+/i, '').split('.');
-  if (!payload || !signature) return res.status(401).json({ error: 'Sign in to access activity progress.' });
+  if (!payload || !signature) return res.status(401).json({ error: 'Please sign in to continue.' });
   const expected = crypto.createHmac('sha256', secret()).update(payload).digest();
   let actual;
   try { actual = Buffer.from(signature, 'base64url'); } catch { return res.status(401).json({ error: 'Invalid session.' }); }

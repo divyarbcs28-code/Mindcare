@@ -150,6 +150,16 @@ export default function VoiceReflection() {
     return '64f1a2b3c4d5e6f7a8b9c0d1';
   };
 
+  // Saving requires the signed session token; the backend takes the owner from it.
+  const authHeaders = () => {
+    try {
+      const token = JSON.parse(localStorage.getItem('mindcare_user_data') || 'null')?.token;
+      return token ? { Authorization: `Bearer ${token}` } : {};
+    } catch {
+      return {};
+    }
+  };
+
   // Step 1: speech-to-text + acoustic features only. Nothing is analysed or saved until the user confirms the transcript.
   const handleAnalyse = async () => {
     if (requestInFlight.current) return;
@@ -225,7 +235,7 @@ export default function VoiceReflection() {
       const source = transcription.status !== 'ok' || !asrText ? 'manual' : draft === asrText ? 'asr' : 'asr_edited';
       const response = await fetchWithTimeout(`${API_BASE_URL}/api/reflections/confirm-voice`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...authHeaders() },
         body: JSON.stringify({
           userId: getUserId(),
           transcript: draft,
@@ -293,7 +303,7 @@ export default function VoiceReflection() {
 
       const response = await fetchWithTimeout(`${API_BASE_URL}/api/reflections`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...authHeaders() },
         body: JSON.stringify({
           userId,
           type: 'text',
