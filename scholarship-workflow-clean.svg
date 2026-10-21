@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+<title id="title">AI-Powered Scholarship and Fellowship Management</title>
+<desc id="desc">A clear process from student application through document checks, eligibility assessment, human review, and applicant notification.</desc>
+<defs>
+ <linearGradient id="bg" x2="0" y2="1"><stop stop-color="#f7fbff"/><stop offset="1" stop-color="#eaf2fc"/></linearGradient>
+ <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="5" stdDeviation="7" flood-color="#163a66" flood-opacity=".10"/></filter>
+ <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#4274b8"/></marker>
+ <style>
+ .h{font:700 34px Arial,sans-serif;fill:#12345b}.sub{font:18px Arial,sans-serif;fill:#526b89}.card{fill:#fff;stroke:#d5e2f2;stroke-width:2;filter:url(#shadow)}.step{font:700 22px Arial,sans-serif;fill:#173b67}.body{font:17px Arial,sans-serif;fill:#38516f}.small{font:15px Arial,sans-serif;fill:#526b89}.num{font:700 18px Arial,sans-serif;fill:#fff}.band{font:700 20px Arial,sans-serif;fill:#173b67}.tag{font:700 14px Arial,sans-serif;fill:#fff}
+ </style>
+</defs>
+<rect width="1600" height="1000" fill="url(#bg)"/>
+<text x="800" y="60" text-anchor="middle" class="h">AI-Powered Scholarship &amp; Fellowship Management</text>
+<text x="800" y="91" text-anchor="middle" class="sub">Accurate checks • Clear reasons • Human decisions</text>
+<rect x="80" y="125" width="1440" height="44" rx="22" fill="#173f70"/>
+<text x="800" y="154" text-anchor="middle" class="tag" style="font-size:16px">APPLICATION PROCESS</text>
+
+<!-- connectors -->
+<path d="M310 348H355M600 348H645M890 348H935M1180 348H1225" fill="none" stroke="#4274b8" stroke-width="4" marker-end="url(#arrow)"/>
+<!-- Step cards -->
+<g>
+ <rect class="card" x="80" y="195" width="230" height="305" rx="18"/>
+ <circle cx="112" cy="230" r="20" fill="#2674cf"/><text x="112" y="236" text-anchor="middle" class="num">1</text>
+ <text x="143" y="237" class="step">Apply</text>
+ <text x="104" y="284" class="body"><tspan x="104" dy="0">Create an account</tspan><tspan x="104" dy="29">Complete the form</tspan><tspan x="104" dy="29">Choose a scheme</tspan><tspan x="104" dy="29">Submit application</tspan></text>
+ <rect x="103" y="423" width="184" height="48" rx="10" fill="#edf5ff"/><text x="195" y="453" text-anchor="middle" class="small">Student / applicant</text>
+</g>
+<g>
+ <rect class="card" x="355" y="195" width="245" height="305" rx="18"/>
+ <circle cx="387" cy="230" r="20" fill="#4561d7"/><text x="387" y="236" text-anchor="middle" class="num">2</text>
+ <text x="418" y="237" class="step">Upload documents</text>
+ <text x="379" y="284" class="body"><tspan x="379" dy="0">Upload required files</tspan><tspan x="379" dy="29">PDFs or clear images</tspan><tspan x="379" dy="29">Review before submitting</tspan></text>
+ <rect x="378" y="398" width="199" height="73" rx="10" fill="#f1f3ff"/><text x="477" y="428" text-anchor="middle" class="small"><tspan x="477">Examples: marksheets,</tspan><tspan x="477" dy="22">income and identity proof</tspan></text>
+</g>
+<g>
+ <rect class="card" x="645" y="195" width="245" height="305" rx="18"/>
+ <circle cx="677" cy="230" r="20" fill="#079b8a"/><text x="677" y="236" text-anchor="middle" class="num">3</text>
+ <text x="708" y="237" class="step">Check documents</text>
+ <text x="669" y="284" class="body"><tspan x="669" dy="0">Read text and key fields</tspan><tspan x="669" dy="29">Check file quality</tspan><tspan x="669" dy="29">Validate required details</tspan><tspan x="669" dy="29">Flag missing or conflicting data</tspan></text>
+ <rect x="668" y="423" width="199" height="48" rx="10" fill="#e9faf6"/><text x="768" y="453" text-anchor="middle" class="small">AI-assisted checks</text>
+</g>
+<g>
+ <rect class="card" x="935" y="195" width="245" height="305" rx="18"/>
+ <circle cx="967" cy="230" r="20" fill="#a33ab1"/><text x="967" y="236" text-anchor="middle" class="num">4</text>
+ <text x="998" y="237" class="step">Assess eligibility</text>
+ <text x="959" y="284" class="body"><tspan x="959" dy="0">Apply scheme criteria</tspan><tspan x="959" dy="29">Check each requirement</tspan><tspan x="959" dy="29">Calculate rule outcomes</tspan><tspan x="959" dy="29">Show evidence and exceptions</tspan></text>
+ <rect x="958" y="423" width="199" height="48" rx="10" fill="#f9effb"/><text x="1058" y="453" text-anchor="middle" class="small">Rules are scheme-specific</text>
+</g>
+<g>
+ <rect class="card" x="1225" y="195" width="295" height="305" rx="18"/>
+ <circle cx="1257" cy="230" r="20" fill="#e38a13"/><text x="1257" y="236" text-anchor="middle" class="num">5</text>
+ <text x="1288" y="237" class="step">Review &amp; decide</text>
+ <text x="1249" y="284" class="body"><tspan x="1249" dy="0">Officer reviews application</tspan><tspan x="1249" dy="29">Inspect flags and evidence</tspan><tspan x="1249" dy="29">Approve, reject or request</tspan><tspan x="1249" dy="24">correction with a reason</tspan></text>
+ <rect x="1248" y="423" width="249" height="48" rx="10" fill="#fff5e6"/><text x="1373" y="453" text-anchor="middle" class="small">Authorized officer decides</text>
+</g>
+
+<rect x="80" y="540" width="1440" height="44" rx="22" fill="#173f70"/>
+<text x="800" y="569" text-anchor="middle" class="tag" style="font-size:16px">RESULTS, RECORDS &amp; APPLICANT SUPPORT</text>
+<path d="M1373 500V600H300V610" fill="none" stroke="#4274b8" stroke-width="4" marker-end="url(#arrow)"/>
+<g>
+ <rect class="card" x="80" y="615" width="445" height="235" rx="18"/>
+ <circle cx="114" cy="652" r="20" fill="#2674cf"/><text x="114" y="658" text-anchor="middle" class="num">6</text>
+ <text x="148" y="659" class="step">Record the decision</text>
+ <text x="108" y="706" class="body"><tspan x="108" dy="0">Save outcome, reason, date and officer</tspan><tspan x="108" dy="30">Keep document checks and rule results</tspan><tspan x="108" dy="30">Maintain an auditable decision history</tspan></text>
+ <rect x="108" y="800" width="385" height="28" rx="14" fill="#edf5ff"/><text x="300" y="820" text-anchor="middle" class="small">Role-based access • Secure records</text>
+</g>
+<g>
+ <rect class="card" x="578" y="615" width="445" height="235" rx="18"/>
+ <circle cx="612" cy="652" r="20" fill="#079b8a"/><text x="612" y="658" text-anchor="middle" class="num">7</text>
+ <text x="646" y="659" class="step">Notify the applicant</text>
+ <text x="606" y="706" class="body"><tspan x="606" dy="0">Show current application status</tspan><tspan x="606" dy="30">Explain the official decision and reason</tspan><tspan x="606" dy="30">List next steps or required corrections</tspan></text>
+ <rect x="606" y="800" width="385" height="28" rx="14" fill="#e9faf6"/><text x="798" y="820" text-anchor="middle" class="small">Clear, accessible status updates</text>
+</g>
+<g>
+ <rect class="card" x="1075" y="615" width="445" height="235" rx="18"/>
+ <circle cx="1109" cy="652" r="20" fill="#4561d7"/><text x="1109" y="658" text-anchor="middle" class="num">8</text>
+ <text x="1143" y="659" class="step">Support &amp; transparency</text>
+ <text x="1103" y="706" class="body"><tspan x="1103" dy="0">Applicant can view status and documents</tspan><tspan x="1103" dy="30">Provide a grievance or appeal route</tspan><tspan x="1103" dy="30">Separate AI flags from official reasons</tspan></text>
+ <rect x="1103" y="800" width="385" height="28" rx="14" fill="#f1f3ff"/><text x="1295" y="820" text-anchor="middle" class="small">AI assists; officials make final decisions</text>
+</g>
+<path d="M525 732H575M1023 732H1072" fill="none" stroke="#4274b8" stroke-width="4" marker-end="url(#arrow)"/>
+<text x="800" y="910" text-anchor="middle" class="sub">AI helps verify information and explain rule results. Final decisions remain with authorized officials.</text>
+</svg>

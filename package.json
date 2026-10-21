@@ -1,0 +1,42 @@
+{
+  "name": "implementation",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "server": "node backend/server.js",
+    "seed:moods": "node backend/seedMoodEntries.js",
+    "dev:server": "python -c \"import subprocess,time; r=subprocess.run(['netstat','-ano'],capture_output=True,text=True); pids=list({l.split()[-1] for l in r.stdout.splitlines() if ':5003 ' in l and 'LISTENING' in l}); [subprocess.run(['taskkill','/F','/PID',p],capture_output=True) for p in pids]; pids and time.sleep(0.5)\" && nodemon backend/server.js",
+    "ml": "python -c \"import subprocess,sys,time; r=subprocess.run(['netstat','-ano'],capture_output=True,text=True); pids=list({l.split()[-1] for l in r.stdout.splitlines() if ':8000 ' in l and 'LISTENING' in l}); [subprocess.run(['taskkill','/F','/PID',p],capture_output=True) for p in pids]; pids and time.sleep(0.8)\" && python ml_service/main.py",
+    "dev:all": "concurrently \"npm run dev\" \"npm run dev:server\"",
+    "dev:all-with-ml": "concurrently -n \"VITE,EXPRESS,PYTHON_ML\" -c \"cyan,magenta,yellow\" \"npm run dev\" \"npm run dev:server\" \"npm run ml\""
+  },
+  "dependencies": {
+    "axios": "^1.20.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "form-data": "^4.0.6",
+    "lucide-react": "^1.47.0",
+    "mongoose": "^8.8.0",
+    "multer": "^2.4.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.4",
+    "recharts": "^3.10.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "concurrently": "^9.0.1",
+    "nodemon": "^3.1.5",
+    "oxlint": "^1.81.0",
+    "vite": "^8.3.0"
+  }
+}
