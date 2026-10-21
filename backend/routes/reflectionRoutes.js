@@ -10,6 +10,13 @@ const router = express.Router();
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://127.0.0.1:8000';
 const ML_SERVICE_TIMEOUT = Number(process.env.ML_SERVICE_TIMEOUT) || 120000;
 
+function mlUnavailableMessage(error) {
+  if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
+    return 'Reflection analysis is unavailable because the ML service is not connected. The website and database may still be working; the ML service needs to be deployed and ML_SERVICE_URL configured.';
+  }
+  return error.response?.data?.detail || error.message || 'The ML service could not analyze this reflection.';
+}
+
 // Ensure uploads folder exists
 if (!fs.existsSync('uploads')) {
   fs.mkdirSync('uploads');
@@ -80,7 +87,8 @@ router.post('/analyze-text', async (req, res) => {
     console.error("Text analysis error:", err.message);
     const status = err.response?.status || 500;
     res.status(status).json({
-      error: err.response?.data?.detail || err.message || 'Failed to analyze text.'
+      error: mlUnavailableMessage(err),
+      code: err.code === 'ECONNREFUSED' || err.code === 'ENOTFOUND' ? 'ML_UNAVAILABLE' : 'ML_ERROR',
     });
   }
 });
@@ -365,9 +373,9 @@ router.post('/', upload.single('audio'), async (req, res) => {
       } catch (pyErr) {
         console.error("Python ML Service error during text analysis:", pyErr.message);
         return res.status(pyErr.response?.status || 503).json({
-          error: pyErr.response?.data?.detail || pyErr.message || 'Python ML Service error during text analysis.',
+          error: mlUnavailableMessage(pyErr),
+          code: pyErr.code === 'ECONNREFUSED' || pyErr.code === 'ENOTFOUND' ? 'ML_UNAVAILABLE' : 'ML_ERROR',
           service: 'ml_service',
-          target: `${ML_SERVICE_URL}/analyze-text`
         });
       }
 

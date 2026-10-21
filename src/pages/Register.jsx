@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Brain, User, Shield, Phone, Heart, Check, ChevronRight, ArrowRight, ArrowLeft } from 'lucide-react';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5003';
@@ -14,6 +15,7 @@ const PREFERENCE_OPTIONS = [
 ];
 
 export default function Register({ onComplete }) {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null); // Added error state for API
@@ -106,6 +108,7 @@ export default function Register({ onComplete }) {
 
       // 3. Complete! Send the returned user object to App.jsx state
       onComplete({ ...data.user, token: data.token });
+      navigate('/', { replace: true });
       
     } catch (err) {
       setErrorMsg(err.message);
