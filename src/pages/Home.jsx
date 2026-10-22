@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Mic, Heart, BarChart2, Smile, ChevronRight, TrendingUp, Activity, Zap } from 'lucide-react';
 import { mockHistory, fusionLabels, emotionLabels } from '../data/mockHistory';
 import { fetchMoodEntries } from '../services/moodService';
+import PageHero from '../components/shared/PageHero';
 
 function getGreeting() {
   const h = new Date().getHours();
@@ -10,6 +11,15 @@ function getGreeting() {
   if (h < 17) return 'Good afternoon';
   if (h < 21) return 'Good evening';
   return 'Good night';
+}
+
+// Greeting photo follows the time of day.
+function getTimeImage() {
+  const h = new Date().getHours();
+  if (h < 12) return '/images/time-morning.webp';
+  if (h < 17) return '/images/time-afternoon.webp';
+  if (h < 21) return '/images/time-evening.webp';
+  return '/images/time-night.webp';
 }
 
 function getRecentPatternFromHistory(recent) {
@@ -25,10 +35,10 @@ function getRecentPattern() {
 }
 
 const quickActions = [
-  { to: '/reflect', icon: Mic,      label: 'Reflect',       desc: 'Record a voice reflection',   color: '#7C5CBF', id: 'qa-reflect' },
-  { to: '/support', icon: Heart,    label: 'Support',       desc: 'Quick help & activities',      color: '#E76F51', id: 'qa-support' },
-  { to: '/insights',icon: BarChart2,label: 'Insights',      desc: 'View your pattern trends',     color: '#5ECFB1', id: 'qa-insights' },
-  { to: '/funzone', icon: Smile,    label: 'Fun Zone',      desc: 'Jokes, quizzes & games',       color: '#F4A261', id: 'qa-funzone' },
+  { to: '/reflect', icon: Mic,      label: 'Reflect',       desc: 'Record a voice reflection',   color: '#7C5CBF', id: 'qa-reflect',  image: '/images/reflect-mountain.webp' },
+  { to: '/support', icon: Heart,    label: 'Support',       desc: 'Quick help & activities',      color: '#E76F51', id: 'qa-support',  image: '/images/support-meditate.webp' },
+  { to: '/insights',icon: BarChart2,label: 'Insights',      desc: 'View your pattern trends',     color: '#5ECFB1', id: 'qa-insights', image: '/images/progress-road.webp' },
+  { to: '/funzone', icon: Smile,    label: 'Fun Zone',      desc: 'Jokes, quizzes & games',       color: '#F4A261', id: 'qa-funzone',  image: '/images/funzone-friends.webp' },
 ];
 
 const supportCards = [
@@ -67,17 +77,13 @@ export default function Home({ userName }) {
   return (
     <div className={`animate-fade-in`} style={{ paddingTop: 8 }}>
       {/* Greeting */}
-      <div style={{ marginBottom: 32 }}>
-        <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem', marginBottom: 4 }}>
-          {getGreeting()}
-        </p>
-        <h1 className="font-display gradient-text" style={{ fontSize: 'clamp(1.6rem, 4vw, 2.2rem)', marginBottom: 8 }}>
-          {userName ? `Hey, ${userName.split(' ')[0]} 👋` : 'Welcome back 👋'}
-        </h1>
-        <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.95rem' }}>
-          How are you feeling today? Record a quick reflection.
-        </p>
-      </div>
+      <PageHero
+        tall
+        image={getTimeImage()}
+        eyebrow={getGreeting()}
+        title={userName ? `Hey, ${userName.split(' ')[0]} 👋` : 'Welcome back 👋'}
+        subtitle="How are you feeling today? Take a moment to check in with yourself."
+      />
 
       {/* CTA Record Button */}
       <Link to="/reflect" id="home-reflect-cta" style={{ textDecoration: 'none', display: 'block', marginBottom: 32 }}>
@@ -199,24 +205,12 @@ export default function Home({ userName }) {
       <div style={{ marginBottom: 24 }}>
         <h3 className="font-display" style={{ marginBottom: 14, fontSize: '1rem' }}>Explore</h3>
         <div className="grid-2 stagger" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
-          {quickActions.map(({ to, icon: Icon, label, desc, color, id }) => (
-            <Link key={id} to={to} id={id} style={{ textDecoration: 'none' }}>
-              <div className="glass-card animate-fade-in" style={{
-                padding: 20,
-                cursor: 'pointer',
-              }}>
-                <div style={{
-                  width: 40, height: 40,
-                  borderRadius: 12,
-                  background: `${color}22`,
-                  border: `1px solid ${color}44`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  marginBottom: 12,
-                }}>
-                  <Icon size={18} color={color} />
-                </div>
-                <h4 style={{ fontSize: '0.9rem', marginBottom: 4 }}>{label}</h4>
-                <p style={{ fontSize: '0.78rem', margin: 0, lineHeight: 1.4 }}>{desc}</p>
+          {quickActions.map(({ to, icon: Icon, label, desc, color, id, image }, i) => (
+            <Link key={id} to={to} id={id} className="photo-tile reveal" style={{ '--d': `${i * 80}ms` }}>
+              <div className="photo-tile__img" style={{ backgroundImage: `url(${image})` }} />
+              <div className="photo-tile__body">
+                <h3 style={{ display: 'flex', alignItems: 'center', gap: 8 }}><Icon size={18} color={color} /> {label}</h3>
+                <p>{desc}</p>
               </div>
             </Link>
           ))}

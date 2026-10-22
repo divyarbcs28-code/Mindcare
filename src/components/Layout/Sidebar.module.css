@@ -97,3 +97,44 @@
   font-size: 0.7rem;
   color: rgba(96, 96, 128, 0.6);
 }
+
+.calmCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 2px;
+  min-height: 112px;
+  padding: 14px;
+  margin-top: 12px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  isolation: isolate;
+  color: #fff;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.calmCard:hover { color: #fff; }
+
+.calmCardImg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background: url('/images/support-yoga.webp') center / cover;
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.calmCard::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(9, 9, 20, 0.1), rgba(9, 9, 20, 0.85));
+}
+
+.calmCard:hover .calmCardImg { transform: scale(1.08); }
+
+.calmCard strong { font-size: 0.85rem; }
+
+.calmCard span:last-child { font-size: 0.72rem; color: rgba(255, 255, 255, 0.78); }

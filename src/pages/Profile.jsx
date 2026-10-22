@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { User, Shield, LogOut, Check, ArrowLeft, Phone } from 'lucide-react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import PageHero from '../components/shared/PageHero';
 
 export default function Profile() {
   const [user, setUser] = useLocalStorage('mindcare_user_data', null);
@@ -76,10 +77,13 @@ export default function Profile() {
 
   return (
     <div className="animate-fade-in">
-      <div className="page-header">
-        <h1 className="page-title gradient-text">Profile & Settings</h1>
-        <p className="page-subtitle">Manage your account, privacy preferences, and emergency contacts.</p>
-      </div>
+      <PageHero
+        image="/images/profile-forest.webp"
+        position="center"
+        eyebrow="Your space"
+        title="Profile & Settings"
+        subtitle="Manage your account, privacy preferences, and emergency contacts."
+      />
 
       <div className="grid-2">
         {/* Account Details */}

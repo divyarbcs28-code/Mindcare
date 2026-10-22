@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { X } from 'lucide-react';
+import PageHero from '../components/shared/PageHero';
 
 const supportCategories = [
   {
@@ -146,10 +147,13 @@ export default function QuickSupport() {
 
   return (
     <div className="animate-fade-in">
-      <div className="page-header">
-        <h1 className="page-title gradient-text">Quick Support</h1>
-        <p className="page-subtitle">One-tap activities to help you feel better right now.</p>
-      </div>
+      <PageHero
+        image="/images/support-meditate.webp"
+        position="center 35%"
+        eyebrow="Support"
+        title="Quick Support"
+        subtitle="One-tap activities to help you feel better right now."
+      />
       <div style={{ padding: '14px 18px', marginBottom: 28, background: 'rgba(231,111,81,0.07)', border: '1px solid rgba(231,111,81,0.2)', borderRadius: 'var(--radius-md)', fontSize: '0.83rem', lineHeight: 1.65 }}>
         In crisis? Please reach out to iCall India: <strong style={{ color: 'var(--color-danger)' }}>9152987821</strong> or visit the <a href="/about" style={{ color: 'var(--color-primary-light)' }}>About and Safety</a> page.
       </div>
@@ -163,9 +167,9 @@ export default function QuickSupport() {
                 <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{cat.desc}</p>
               </div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))', gap: 12 }}>
               {cat.activities.map((act) => (
-                <button key={act.id} id={`act-${act.id}`} onClick={() => openActivity(act, cat.color)} className="btn btn-secondary" style={{ padding: 16, borderRadius: 'var(--radius-md)', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 6, textAlign: 'left', height: 'auto' }}>
+                <button key={act.id} id={`act-${act.id}`} onClick={() => openActivity(act, cat.color)} className="btn btn-secondary" style={{ padding: 16, borderRadius: 'var(--radius-md)', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 6, textAlign: 'left', height: 'auto', whiteSpace: 'normal', minWidth: 0 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
                     <span style={{ fontSize: '1.3rem' }}>{act.emoji}</span>
                     <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>{act.duration}</span>

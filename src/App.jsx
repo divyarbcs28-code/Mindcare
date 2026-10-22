@@ -11,6 +11,7 @@ import Profile from './pages/Profile';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import { useLocalStorage } from './hooks/useLocalStorage';
+import CursorGlitter from './components/shared/CursorGlitter';
 
 export default function App() {
   const [user, setUser] = useLocalStorage('mindcare_user_data', null);
@@ -23,6 +24,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
+      <CursorGlitter />
       <Routes>
         <Route path="/" element={user ? withLayout(<Home userName={user.firstName} />) : <LandingPage />} />
         <Route path="/login" element={<Login onLogin={handleLoginComplete} onGoToRegister={() => window.location.assign('/register')} />} />

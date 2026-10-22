@@ -4,6 +4,7 @@ import { mockHistory, fusionLabels, emotionLabels } from '../data/mockHistory';
 import { EmotionBadge, FusionBadge, SentimentBadge } from '../components/shared/EmotionBadge';
 import { fetchMoodEntries } from '../services/moodService';
 import { TrendingUp, Calendar, ChevronDown, ChevronUp } from 'lucide-react';
+import PageHero from '../components/shared/PageHero';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload || !payload.length) return null;
@@ -54,10 +55,13 @@ export default function Insights() {
 
   return (
     <div className="animate-fade-in">
-      <div className="page-header">
-        <h1 className="page-title gradient-text">Insights and History</h1>
-        <p className="page-subtitle">Your personal voice pattern trends. Compared against your own baseline, not a population average.</p>
-      </div>
+      <PageHero
+        image="/images/progress-road.webp"
+        position="center 60%"
+        eyebrow="Progress"
+        title="Insights and History"
+        subtitle="Your personal voice pattern trends. Compared against your own baseline, not a population average."
+      />
       <div className="stagger" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12, marginBottom: 28 }}>
         {[
           { label: 'Total entries', value: total, color: 'var(--color-primary-light)', emoji: '📋' },

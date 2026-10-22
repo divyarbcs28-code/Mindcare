@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Brain, Mail, Lock, Eye, EyeOff, ArrowRight, UserPlus } from 'lucide-react';
+import AuthShell from '../components/shared/AuthShell';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5003';
 
@@ -47,15 +48,12 @@ export default function Login({ onLogin, onGoToRegister }) {
   };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '24px',
-      background: 'var(--color-bg)',
-    }}>
-      <div style={{ width: '100%', maxWidth: 420 }}>
+    <AuthShell
+      image="/images/login-sunset.webp"
+      quote="Welcome back. Take a breath — this space is yours."
+      quoteBy="Every reflection is a small act of care."
+    >
+      <div>
 
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
@@ -176,6 +174,6 @@ export default function Login({ onLogin, onGoToRegister }) {
         </div>
 
       </div>
-    </div>
+    </AuthShell>
   );
 }

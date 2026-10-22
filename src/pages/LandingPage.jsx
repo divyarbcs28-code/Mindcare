@@ -1,174 +1,235 @@
-import { ArrowRight, BrainCircuit, CheckCircle2, HeartPulse, Mic, ShieldCheck, Sparkles, TrendingUp } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { ArrowRight, BrainCircuit, HeartPulse, Lock, Mic, PenLine, ShieldCheck, Sparkles, TrendingUp, Wind } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useReveal } from '../hooks/useReveal';
 
 const features = [
   {
     icon: Mic,
+    image: '/images/reflect-mountain.webp',
     title: 'Voice reflection',
-    desc: 'Record how you feel in your own words and let the system understand what your tone and expression are saying.',
+    desc: 'Speak freely about your day. MindCare transcribes it and looks at both your words and the way you sound.',
   },
   {
     icon: TrendingUp,
+    image: '/images/progress-road.webp',
     title: 'Personal insights',
-    desc: 'Track patterns over time with a personal baseline instead of generic wellness scores.',
+    desc: 'See how your mood moves over time, compared with your own baseline rather than anyone else’s.',
   },
   {
     icon: ShieldCheck,
-    title: 'Supportive guidance',
-    desc: 'Get small, practical suggestions for grounding, breathing, and emotional check-ins when stress rises.',
+    image: '/images/support-meditate.webp',
+    title: 'Gentle support',
+    desc: 'Breathing, grounding and small activities suggested for the moment you are in.',
   },
 ];
 
-const stats = [
-  { label: 'Daily reflections', value: '10k+' },
-  { label: 'Mood patterns tracked', value: '24/7' },
-  { label: 'Support suggestions', value: 'AI-guided' },
+const steps = [
+  {
+    step: '01',
+    icon: PenLine,
+    image: '/images/journal.webp',
+    title: 'Speak or write',
+    desc: 'Record a short voice note or type a journal entry. There is no right way to feel.',
+  },
+  {
+    step: '02',
+    icon: BrainCircuit,
+    image: '/images/pen.webp',
+    title: 'Understand the pattern',
+    desc: 'Emotion and sentiment are read from what you say; your voice is compared with your own recent recordings.',
+  },
+  {
+    step: '03',
+    icon: Wind,
+    image: '/images/support-yoga.webp',
+    title: 'Take a small step',
+    desc: 'Get one calm, practical suggestion and watch your progress build over the weeks.',
+  },
+];
+
+const feelings = ['calm', 'hopeful', 'tired', 'anxious', 'grateful', 'focused', 'overwhelmed', 'proud', 'lonely', 'content', 'restless', 'joyful'];
+
+const facts = [
+  { value: '2', label: 'ways to reflect — voice or text' },
+  { value: '0', label: 'diagnoses — patterns only' },
+  { value: '100%', label: 'your own history, private to you' },
 ];
 
 export default function LandingPage() {
-  return (
-    <div className="landing-page">
-      <header className="landing-header glass-card">
-        <div className="brand-wrap">
-          <div className="brand-badge">
-            <BrainCircuit size={20} />
-          </div>
-          <span className="brand-name">MindCare</span>
-        </div>
+  const [scrolled, setScrolled] = useState(false);
+  useReveal('landing');
 
-        <nav className="landing-nav">
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  return (
+    <div className="lp">
+      <header className={`lp-nav ${scrolled ? 'is-scrolled' : ''}`}>
+        <Link to="/" className="lp-brand">
+          <span className="lp-brand__mark"><BrainCircuit size={20} /></span>
+          MindCare
+        </Link>
+        <nav className="lp-nav__links">
           <a href="#features">Features</a>
           <a href="#how-it-works">How it works</a>
-          <a href="#support">Support</a>
+          <a href="#care">Care</a>
         </nav>
-
-        <div className="landing-actions">
-          <Link to="/login" className="btn btn-secondary">Sign in</Link>
-          <Link to="/register" className="btn btn-primary">Get started</Link>
+        <div className="lp-nav__actions">
+          <Link to="/login" className="btn btn-secondary btn-sm">Sign in</Link>
+          <Link to="/register" className="btn btn-primary btn-sm">Get started</Link>
         </div>
       </header>
 
-      <main className="landing-main">
-        <section className="hero-section">
-          <div className="hero-copy">
-            <span className="eyebrow">
-              <Sparkles size={14} /> Thoughtful emotional care
+      {/* Hero */}
+      <section className="lp-hero">
+        <div className="lp-hero__media" aria-hidden="true" />
+        <div className="lp-hero__shade" aria-hidden="true" />
+
+        <div className="lp-hero__inner">
+          <div className="lp-hero__copy">
+            <span className="lp-eyebrow lp-rise" style={{ '--d': '0ms' }}>
+              <Sparkles size={14} /> A quiet space for your mind
             </span>
-            <h1>
-              Understand your mood with <span className="gradient-text">voice, reflection, and support</span>.
+            <h1 className="lp-rise" style={{ '--d': '120ms' }}>
+              Pause. Breathe.<br /><em>Hear how you feel.</em>
             </h1>
-            <p>
-              MindCare helps you notice emotional patterns early, reflect on your day, and get gentle recommendations before stress becomes overwhelming.
+            <p className="lp-rise" style={{ '--d': '240ms' }}>
+              MindCare listens to your reflections, notices gentle shifts in your mood, and offers small steps
+              before stress builds up.
             </p>
-
-            <div className="cta-row">
+            <div className="lp-hero__cta lp-rise" style={{ '--d': '360ms' }}>
               <Link to="/register" className="btn btn-primary btn-lg">
-                Start your reflection <ArrowRight size={18} />
+                Start reflecting <ArrowRight size={18} />
               </Link>
-              <a href="#how-it-works" className="btn btn-secondary btn-lg">See how it works</a>
-            </div>
-
-            <div className="mini-trust-row">
-              {['Private', 'Personalized', 'Gentle'].map((item) => (
-                <span key={item} className="trust-pill">
-                  <CheckCircle2 size={14} /> {item}
-                </span>
-              ))}
+              <a href="#how-it-works" className="btn btn-glass btn-lg">See how it works</a>
             </div>
           </div>
 
-          <div className="hero-visual glass-card">
-            <div className="phone-card">
-              <div className="phone-header">
-                <span className="dot dot-one" />
-                <span className="dot dot-two" />
-                <span className="dot dot-three" />
+          <div className="lp-float" aria-hidden="true">
+            <div className="lp-float__card lp-float__card--mood">
+              <HeartPulse size={18} />
+              <div>
+                <small>Today&rsquo;s mood</small>
+                <strong>Calm &amp; focused</strong>
               </div>
-
-              <div className="phone-body">
-                <div className="mood-box positive">
-                  <HeartPulse size={18} />
-                  <div>
-                    <p>Today’s mood</p>
-                    <strong>Calm + focused</strong>
-                  </div>
-                </div>
-
-                <div className="wave-card">
-                  <span>Voice pattern</span>
-                  <div className="mini-wave">
-                    {Array.from({ length: 18 }).map((_, index) => (
-                      <i key={index} style={{ height: `${20 + ((index * 13) % 60)}%` }} />
-                    ))}
-                  </div>
-                </div>
-
-                <div className="insight-card">
-                  <p>Suggested exercise</p>
-                  <strong>Grounding breath</strong>
-                  <small>Recommended based on your recent reflection</small>
-                </div>
+            </div>
+            <div className="lp-float__card lp-float__card--wave">
+              <small>Listening&hellip;</small>
+              <div className="lp-wave">
+                {Array.from({ length: 22 }).map((_, i) => (
+                  <i key={i} style={{ '--h': `${25 + ((i * 37) % 70)}%`, '--i': i }} />
+                ))}
+              </div>
+            </div>
+            <div className="lp-float__card lp-float__card--tip">
+              <Wind size={18} />
+              <div>
+                <small>Suggested for you</small>
+                <strong>4-7-8 breathing</strong>
               </div>
             </div>
           </div>
-        </section>
+        </div>
 
-        <section id="features" className="feature-grid">
-          {features.map(({ icon: Icon, title, desc }) => (
-            <article key={title} className="glass-card feature-card">
-              <div className="feature-icon">
-                <Icon size={22} />
-              </div>
-              <h3>{title}</h3>
-              <p>{desc}</p>
-            </article>
-          ))}
-        </section>
+        <a href="#features" className="lp-scroll" aria-label="Scroll to features"><span /></a>
+      </section>
 
-        <section className="stats-row">
-          {stats.map(({ value, label }) => (
-            <div key={label} className="glass-card stat-card">
-              <strong>{value}</strong>
-              <span>{label}</span>
-            </div>
-          ))}
-        </section>
+      {/* Feelings marquee */}
+      <div className="lp-marquee" aria-hidden="true">
+        <div className="lp-marquee__track">
+          {[...feelings, ...feelings].map((f, i) => <span key={i}>{f}</span>)}
+        </div>
+      </div>
 
-        <section id="how-it-works" className="steps-section">
-          <div className="section-heading">
-            <span className="eyebrow">
-              <Sparkles size={14} /> How it works
-            </span>
-            <h2>Simple steps that create better self-awareness.</h2>
+      <main className="lp-main">
+        {/* Features */}
+        <section id="features" className="lp-section">
+          <div className="lp-heading reveal">
+            <span className="lp-eyebrow">What MindCare does</span>
+            <h2>Built around <em>you</em>, not a score.</h2>
           </div>
+          <div className="lp-features">
+            {features.map(({ icon: Icon, image, title, desc }, i) => (
+              <article key={title} className="lp-feature reveal" style={{ '--d': `${i * 120}ms` }}>
+                <div className="lp-feature__img" style={{ backgroundImage: `url(${image})` }} />
+                <div className="lp-feature__body">
+                  <span className="lp-feature__icon"><Icon size={20} /></span>
+                  <h3>{title}</h3>
+                  <p>{desc}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
 
-          <div className="steps-grid">
-            {[
-              ['01', 'Record', 'Speak about your day or emotions in a short voice reflection.'],
-              ['02', 'Understand', 'Look at your tone, transcript, and emotional patterns over time.'],
-              ['03', 'Support', 'Receive a calm, relevant suggestion for the next moment.'],
-            ].map(([step, title, desc]) => (
-              <div key={step} className="glass-card step-card">
-                <span className="step-index">{step}</span>
-                <h3>{title}</h3>
-                <p>{desc}</p>
+        {/* How it works */}
+        <section id="how-it-works" className="lp-section">
+          <div className="lp-heading reveal">
+            <span className="lp-eyebrow">How it works</span>
+            <h2>Three small steps toward <em>self-awareness</em>.</h2>
+          </div>
+          <div className="lp-steps">
+            {steps.map(({ step, icon: Icon, image, title, desc }) => (
+              <div key={step} className="lp-step reveal">
+                <div className="lp-step__img">
+                  <img src={image} alt="" loading="lazy" />
+                </div>
+                <div className="lp-step__text">
+                  <span className="lp-step__num">{step}</span>
+                  <h3><Icon size={22} /> {title}</h3>
+                  <p>{desc}</p>
+                </div>
               </div>
             ))}
           </div>
         </section>
 
-        <section id="support" className="cta-banner glass-card">
-          <div>
-            <span className="eyebrow dark">
-              <HeartPulse size={14} /> Supportive care
-            </span>
-            <h2>Take a gentle step toward feeling more grounded.</h2>
-          </div>
-          <Link to="/login" className="btn btn-primary btn-lg">
-            Begin now <ArrowRight size={18} />
-          </Link>
+        {/* Honest facts */}
+        <section className="lp-facts">
+          {facts.map(({ value, label }, i) => (
+            <div key={label} className="lp-fact reveal" style={{ '--d': `${i * 100}ms` }}>
+              <strong>{value}</strong>
+              <span>{label}</span>
+            </div>
+          ))}
         </section>
       </main>
+
+      {/* Quote over parallax photo */}
+      <section className="lp-quote">
+        <div className="lp-quote__media" aria-hidden="true" />
+        <blockquote className="reveal">
+          &ldquo;Feelings are much like waves. We can&rsquo;t stop them from coming, but we can choose which ones to surf.&rdquo;
+          <cite>&mdash; Jonatan M&aring;rtensson</cite>
+        </blockquote>
+      </section>
+
+      <main className="lp-main">
+        <section id="care" className="lp-cta reveal">
+          <div className="lp-cta__img" aria-hidden="true" />
+          <div className="lp-cta__body">
+            <span className="lp-eyebrow"><Lock size={14} /> Private by design</span>
+            <h2>Take a gentle step toward feeling more grounded.</h2>
+            <p>
+              MindCare is a reflection tool, not a diagnosis. If you are ever in crisis, please reach out to a trusted
+              person or a local helpline right away.
+            </p>
+            <Link to="/register" className="btn btn-primary btn-lg">
+              Create your space <ArrowRight size={18} />
+            </Link>
+          </div>
+        </section>
+      </main>
+
+      <footer className="lp-footer">
+        <span className="lp-brand"><span className="lp-brand__mark"><BrainCircuit size={16} /></span> MindCare</span>
+        <span>A student mini-project &middot; Photos from Unsplash</span>
+      </footer>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Brain, User, Shield, Phone, Heart, Check, ChevronRight, ArrowRight, ArrowLeft } from 'lucide-react';
+import AuthShell from '../components/shared/AuthShell';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5003';
 
@@ -118,8 +119,13 @@ export default function Register({ onComplete }) {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'var(--space-4)' }}>
-      <div className="modal" style={{ width: '100%', maxWidth: 540, padding: 0, overflow: 'hidden' }}>
+    <AuthShell
+      image="/images/time-morning.webp"
+      quote="Every sunrise is a fresh start. Let's set up your space."
+      quoteBy="Three quick steps — it takes about a minute."
+      maxWidth={540}
+    >
+      <div className="modal" style={{ width: '100%', maxWidth: 540, padding: 0, overflow: 'hidden', animation: 'none' }}>
         
         {/* Header / Progress */}
         <div style={{ padding: '24px 32px', background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid var(--color-border)' }}>
@@ -293,6 +299,6 @@ export default function Register({ onComplete }) {
           </p>
         </div>
       </div>
-    </div>
+    </AuthShell>
   );
 }

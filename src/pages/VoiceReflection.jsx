@@ -4,6 +4,8 @@ import { useAudioRecorder } from '../hooks/useAudioRecorder';
 import AnimatedRing from '../components/shared/AnimatedRing';
 import { EmotionBadge, FusionBadge, SentimentBadge } from '../components/shared/EmotionBadge';
 import { blobToWav } from '../utils/audioConverter';
+import PageHero from '../components/shared/PageHero';
+import { Link } from 'react-router-dom';
 
 // Reflections are English-only: the emotion and sentiment models are English models.
 const REFLECTION_LANGUAGE = 'en';
@@ -370,10 +372,13 @@ export default function VoiceReflection() {
 
   return (
     <div className="animate-fade-in">
-      <div className="page-header">
-        <h1 className="page-title gradient-text">Reflection Studio</h1>
-        <p className="page-subtitle">Reflect via voice or typed journal to track your emotions, sentiment, and patterns.</p>
-      </div>
+      <PageHero
+        image="/images/reflect-mountain.webp"
+        position="center 40%"
+        eyebrow="Reflect"
+        title="Reflection Studio"
+        subtitle="Reflect via voice or typed journal to track your emotions, sentiment, and patterns."
+      />
 
       {/* Mode Switcher */}
       {phase !== 'result' && phase !== 'analysing' && phase !== 'review' && (
@@ -622,7 +627,7 @@ export default function VoiceReflection() {
           )}
 
           {/* Result Card */}
-          {phase === 'result' && result && (
+          {phase === 'result' && result && inputMode !== 'text' && (
             <div className="animate-fade-in-scale" style={{ textAlign: 'left' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                 <h3 className="gradient-text">Analysis Result</h3>
@@ -709,18 +714,14 @@ export default function VoiceReflection() {
                       </div>
                     ))}
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <span style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>Voice model status:</span>
-                    {result.voiceModelStatus === 'not_trained' ? (
-                      <span className="badge" style={{ background: 'rgba(244,162,97,0.15)', color: 'var(--color-warning)' }}>
-                        ⏳ Pending Training Phase
-                      </span>
-                    ) : (
+                  {result.voiceModelStatus !== 'not_trained' && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>Voice pattern:</span>
                       <span className={`badge ${result.voiceDeviation === 'high' ? 'badge-significant' : result.voiceDeviation === 'moderate' ? 'badge-change' : 'badge-stable'}`}>
                         {result.voiceDeviation === 'high' ? '▲ High' : result.voiceDeviation === 'moderate' ? '◆ Moderate' : '● Low'}
                       </span>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -825,6 +826,21 @@ export default function VoiceReflection() {
             </p>
             <p style={{ fontSize: '0.875rem', margin: 0, lineHeight: 1.65 }}>{result.fusionNote}</p>
           </div>
+
+          {/* Mood-based activity recommendations for typed reflections */}
+          {result.suggestedActivity && (
+            <div style={{ padding: '16px 18px', background: 'rgba(94,207,177,0.08)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(94,207,177,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span style={{ fontSize: '1.5rem' }}>{result.suggestedActivity.emoji}</span>
+                <div>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', margin: 0 }}>A fun idea for feeling {result.suggestedActivity.mood}</p>
+                  <p style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--color-accent)', margin: 0 }}>{result.suggestedActivity.label}</p>
+                  <p style={{ fontSize: '0.78rem', color: 'var(--color-text-secondary)', margin: '3px 0 0' }}>Open Fun Zone for more activities picked for this mood.</p>
+                </div>
+              </div>
+              <Link to={result.suggestedActivity.to} className="btn btn-accent btn-sm" id="btn-text-suggested-activity">Explore activities →</Link>
+            </div>
+          )}
         </div>
       )}
 

@@ -44,6 +44,12 @@ export default function Sidebar({ userName }) {
         ))}
       </nav>
 
+      <NavLink to="/support" className={styles.calmCard}>
+        <span className={styles.calmCardImg} aria-hidden="true" />
+        <strong>Need a pause?</strong>
+        <span>Try a 1-minute breathing break</span>
+      </NavLink>
+
       <div className={styles.sidebarFooter}>
         <p className={styles.footerText}>🔒 Your data stays private</p>
         <p className={styles.footerSub}>No diagnosis. Patterns only.</p>

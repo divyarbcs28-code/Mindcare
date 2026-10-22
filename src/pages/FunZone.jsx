@@ -10,6 +10,7 @@ import TicTacToe from '../components/games/TicTacToe';
 import SimonGame from '../components/games/SimonGame';
 import DiceRoll from '../components/games/DiceRoll';
 import DrumKit from '../components/games/DrumKit';
+import PageHero from '../components/shared/PageHero';
 
 /* ─────────────────────────────────────────────
    JOKE CARD
@@ -460,15 +461,16 @@ export default function FunZone() {
 
   return (
     <div className="animate-fade-in">
-      <WellnessActivities onMoodChange={handleMoodChange} />
-      <div className="page-header">
-        <h1 className="page-title gradient-text">Fun Zone 🎮</h1>
-        <p className="page-subtitle">
-          {moodPlan
+      <PageHero
+        image="/images/funzone-friends.webp"
+        position="center 40%"
+        eyebrow="Take a break"
+        title="Fun Zone 🎮"
+        subtitle={<>{moodPlan
             ? <>Picked for feeling <strong style={{ color: 'var(--color-accent)' }}>{mood}</strong>: {moodPlan.reason}</>
-            : 'Take a break. Laugh a little. Play a game. You deserve it.'}
-        </p>
-      </div>
+            : 'Take a break. Laugh a little. Play a game. You deserve it.'}</>}
+      />
+      <WellnessActivities onMoodChange={handleMoodChange} />
 
       {/* Tabs */}
       <div style={{ display: 'flex', gap: 8, marginBottom: 24, flexWrap: 'wrap' }}>

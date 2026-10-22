@@ -1,4 +1,5 @@
 import { ExternalLink, Phone, Heart, Shield, Brain, Users, Mic, Zap, Link } from 'lucide-react';
+import PageHero from '../components/shared/PageHero';
 
 const crisisResources = [
   { name: 'iCall India', contact: '9152987821', type: 'Phone', desc: 'Psychosocial support helpline by TISS' },
@@ -17,10 +18,13 @@ const techContributions = [
 export default function About() {
   return (
     <div className="animate-fade-in">
-      <div className="page-header">
-        <h1 className="page-title gradient-text">About & Safety</h1>
-        <p className="page-subtitle">Understanding MindCare — what it is, what it is not, and where to get real help.</p>
-      </div>
+      <PageHero
+        image="/images/about-lotus.webp"
+        position="center"
+        eyebrow="About"
+        title="About & Safety"
+        subtitle="Understanding MindCare — what it is, what it is not, and where to get real help."
+      />
 
       {/* Safety Card — most important, shown first */}
       <div className="glass-card" style={{
