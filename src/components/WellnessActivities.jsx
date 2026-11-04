@@ -53,7 +53,7 @@ export default function WellnessActivities({ onMoodChange }) {
   const chooseMood = async (value) => {
     setMood(value); setError(''); setNotice('');
     onMoodChange?.(value);
-    try { const data = await request(`/recommendations?mood=${encodeURIComponent(value)}`); setActivities(data.activities); await loadProgress(); }
+    try { const data = await request(`/recommendations?mood=${encodeURIComponent(value)}`); setActivities((data.activities || []).slice(0, 3)); await loadProgress(); }
     catch (err) { setError(err.message); setActivities([]); }
   };
 
@@ -120,8 +120,8 @@ export default function WellnessActivities({ onMoodChange }) {
       <div style={{ display: 'flex', gap: 10, marginTop: 12, flexWrap: 'wrap' }}><button type="button" className="btn btn-primary" disabled={busy || !playerDone} onClick={() => perform(current, 'complete')}>Complete activity</button><button type="button" className="btn btn-secondary" disabled={busy} onClick={() => { perform(current, 'skip'); setCurrent(null); }}>Skip</button><span style={labelStyle}>Elapsed: {Math.floor(seconds / 60)}:{String(seconds % 60).padStart(2, '0')}</span></div>
     </div>}
 
-    {!current && activities.map((activity) => <div key={activity.id} className="glass-card" style={card}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}><div><h3 style={{ marginBottom: 4 }}>{activity.icon} {activity.title}</h3><p style={{ margin: '0 0 8px' }}>{activity.description}</p><span style={labelStyle}>{activity.type} · {activity.durationMinutes} min</span></div><div style={{ display: 'flex', alignItems: 'center', gap: 8 }}><button type="button" className="btn btn-primary btn-sm" disabled={busy} onClick={() => perform(activity, 'start')}>Start Activity</button><button type="button" className="btn btn-secondary btn-sm" disabled={busy} onClick={() => perform(activity, 'skip')}>Skip</button></div></div>
+    {!current && activities.map((activity, index) => <div key={activity.id} className="glass-card" style={{ ...card, borderColor: index === 0 ? 'rgba(94,207,177,0.38)' : 'var(--color-border)', background: index === 0 ? 'linear-gradient(120deg, rgba(94,207,177,0.09), rgba(124,92,191,0.04))' : undefined }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}><div style={{ display: 'flex', alignItems: 'flex-start', gap: 14, flex: '1 1 300px' }}><span aria-hidden="true" style={{ width: 48, height: 48, flex: '0 0 48px', display: 'grid', placeItems: 'center', borderRadius: 15, background: 'rgba(124,92,191,0.14)', fontSize: '1.45rem' }}>{activity.icon}</span><div><span style={{ display: 'inline-flex', marginBottom: 7, padding: '4px 9px', borderRadius: 999, background: index === 0 ? 'rgba(94,207,177,0.14)' : 'rgba(124,92,191,0.12)', color: index === 0 ? 'var(--color-accent)' : 'var(--color-primary-light)', fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.06em' }}>{index === 0 ? 'TOP PICK' : 'MOOD MATCH'} · {index + 1}</span><h3 style={{ margin: '0 0 4px' }}>{activity.title}</h3><p style={{ margin: '0 0 8px', color: 'var(--color-text-secondary)' }}>{activity.description}</p><span style={labelStyle}>{activity.type} · {activity.durationMinutes} min</span></div></div><div style={{ display: 'flex', alignItems: 'center', gap: 8 }}><button type="button" className="btn btn-primary btn-sm" disabled={busy} onClick={() => perform(activity, 'start')}>Start activity</button><button type="button" className="btn btn-secondary btn-sm" disabled={busy} onClick={() => perform(activity, 'skip')}>Skip</button></div></div>
     </div>)}
 
     <div className="glass-card" style={card}>

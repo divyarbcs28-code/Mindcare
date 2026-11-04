@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
-import { mockHistory, fusionLabels, emotionLabels } from '../data/mockHistory';
-import { EmotionBadge, FusionBadge, SentimentBadge } from '../components/shared/EmotionBadge';
+import { mockHistory } from '../data/mockHistory';
+import { EmotionBadge, SentimentBadge } from '../components/shared/EmotionBadge';
 import { fetchMoodEntries } from '../services/moodService';
 import { TrendingUp, Calendar, ChevronDown, ChevronUp } from 'lucide-react';
 import PageHero from '../components/shared/PageHero';
@@ -41,7 +41,6 @@ export default function Insights() {
 
   const total = history.length;
   const negCount = history.filter(e => e.emotion === 'negative').length;
-  const stableCount = history.filter(e => e.fusionResult === 'stable').length;
   const avgPitch = (history.reduce((s, e) => s + (Number(e.pitchVariation) || 0), 0) / (total || 1)).toFixed(2);
   const basePitch = history.slice(0, 3).reduce((s, e) => s + (Number(e.pitchVariation) || 0), 0) / Math.max(history.slice(0, 3).length, 1);
   const recentPitch = history.slice(-3).reduce((s, e) => s + (Number(e.pitchVariation) || 0), 0) / Math.max(history.slice(-3).length, 1);
@@ -62,10 +61,9 @@ export default function Insights() {
         title="Insights and History"
         subtitle="Your personal voice pattern trends. Compared against your own baseline, not a population average."
       />
-      <div className="stagger" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12, marginBottom: 28 }}>
+      <div className="stagger" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12, marginBottom: 28 }}>
         {[
           { label: 'Total entries', value: total, color: 'var(--color-primary-light)', emoji: '📋' },
-          { label: 'Stable days', value: stableCount, color: 'var(--color-accent)', emoji: '✅' },
           { label: 'Noticed changes', value: negCount, color: 'var(--color-warning)', emoji: '📊' },
           { label: 'Avg pitch var.', value: avgPitch, color: 'var(--color-text-secondary)', emoji: '🎙️' },
         ].map(({ label, value, color, emoji }) => (
@@ -111,7 +109,7 @@ export default function Insights() {
               <button id={`entry-toggle-${entry.id}`} onClick={() => setExpandedEntry(expandedEntry === entry.id ? null : entry.id)} style={{ width: '100%', padding: '14px 16px', background: expandedEntry === entry.id ? 'rgba(124,92,191,0.08)' : 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12, textAlign: 'left' }}>
                 <Calendar size={14} color="var(--color-text-muted)" />
                 <span style={{ fontSize: '0.83rem', color: 'var(--color-text-secondary)', minWidth: 80 }}>{new Date(entry.date).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })}</span>
-                <div style={{ flex: 1, display: 'flex', gap: 8, flexWrap: 'wrap' }}><EmotionBadge emotion={entry.emotion} /><SentimentBadge sentiment={entry.sentiment} /><FusionBadge result={entry.fusionResult} /></div>
+                <div style={{ flex: 1, display: 'flex', gap: 8, flexWrap: 'wrap' }}><EmotionBadge emotion={entry.emotion} /><SentimentBadge sentiment={entry.sentiment} /></div>
                 {expandedEntry === entry.id ? <ChevronUp size={16} color="var(--color-text-muted)" /> : <ChevronDown size={16} color="var(--color-text-muted)" />}
               </button>
               {expandedEntry === entry.id && (

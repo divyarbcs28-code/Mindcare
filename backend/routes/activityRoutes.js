@@ -95,6 +95,7 @@ router.get('/recommendations', requireActivityAuth, async (req, res) => {
       .filter((activity) => activity.moods.includes(mood))
       .map((activity) => ({ activity, score: penalty(activity.id) + Math.random() * 0.5 }))
       .sort((a, b) => a.score - b.score)
+      .slice(0, 3)
       .map(({ activity }) => activity);
 
     for (const activity of activities) {
