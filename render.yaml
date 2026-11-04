@@ -30,7 +30,7 @@ services:
 
   # React Frontend (Static Site on Render)
   - type: web
-    name: mindcare-app-ui
+    name: mindcare-frontend-divya-2026
     runtime: static
     buildCommand: npm run build
     staticPublishPath: dist
