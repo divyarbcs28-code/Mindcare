@@ -15,19 +15,6 @@ services:
       - key: PORT
         value: 5003
 
-  # Python FastAPI ML Service
-  - type: web
-    name: mindcare-ai-service
-    runtime: python
-    plan: free
-    rootDir: ml_service
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
-    healthCheckPath: /health
-    envVars:
-      - key: PYTHON_VERSION
-        value: 3.10.12
-
   # React Frontend (Static Site on Render)
   - type: web
     name: mindcare-frontend-divya-2026
