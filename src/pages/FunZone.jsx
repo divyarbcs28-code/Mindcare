@@ -1,194 +1,13 @@
 import { useState, useCallback } from 'react';
-import { RefreshCw, Zap, RotateCcw, Music2, Laugh, Brain, Layers3, Timer, Wind, BookOpen, Hash, CircleDot, AudioLines, Dices, Drum, Sparkles, Play } from 'lucide-react';
-import { jokes } from '../data/jokes';
-import { quizQuestions } from '../data/quizData';
+import { RotateCcw, Music2, Layers3, Wind, BookOpen, Hash, CircleDot, AudioLines, Drum, Sparkles, Play, Paintbrush, MessagesSquare, Globe2, Clapperboard, ExternalLink } from 'lucide-react';
 import WellnessActivities from '../components/WellnessActivities';
 import WorryBubbles from '../components/games/WorryBubbles';
 import WordScramble from '../components/games/WordScramble';
 import GuessNumber from '../components/games/GuessNumber';
 import TicTacToe from '../components/games/TicTacToe';
 import SimonGame from '../components/games/SimonGame';
-import DiceRoll from '../components/games/DiceRoll';
 import DrumKit from '../components/games/DrumKit';
 import PageHero from '../components/shared/PageHero';
-
-/* ─────────────────────────────────────────────
-   JOKE CARD
-───────────────────────────────────────────── */
-function JokeSection() {
-  const [jokeIndex, setJokeIndex] = useState(0);
-  const [showPunchline, setShowPunchline] = useState(false);
-  const [animKey, setAnimKey] = useState(0);
-
-  const nextJoke = () => {
-    setShowPunchline(false);
-    setAnimKey(k => k + 1);
-    setJokeIndex(i => (i + 1) % jokes.length);
-  };
-
-  const current = jokes[jokeIndex];
-
-  return (
-    <div className="glass-card" style={{ padding: 28, marginBottom: 24 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
-        <span style={{ fontSize: '1.5rem' }}>😂</span>
-        <h3 className="font-display" style={{ fontSize: '1rem' }}>Make Me Laugh</h3>
-      </div>
-      <div key={animKey} className="animate-fade-in-scale" style={{
-        padding: 24,
-        background: 'rgba(244,162,97,0.08)',
-        borderRadius: 'var(--radius-lg)',
-        border: '1px solid rgba(244,162,97,0.2)',
-        minHeight: 140,
-        display: 'flex', flexDirection: 'column', justifyContent: 'center',
-        textAlign: 'center',
-      }}>
-        <p style={{ fontSize: '1.05rem', fontWeight: 600, color: 'var(--color-text-primary)', lineHeight: 1.5, marginBottom: showPunchline ? 16 : 0 }}>
-          {current.setup}
-        </p>
-        {showPunchline && (
-          <p className="animate-fade-in" style={{ fontSize: '1rem', color: 'var(--color-warning)', fontStyle: 'italic', lineHeight: 1.5, margin: 0 }}>
-            😄 {current.punchline}
-          </p>
-        )}
-      </div>
-      <div style={{ display: 'flex', gap: 10, marginTop: 16, justifyContent: 'center' }}>
-        {!showPunchline ? (
-          <button id="btn-show-punchline" onClick={() => setShowPunchline(true)} className="btn btn-primary">
-            <Zap size={16} /> Show punchline
-          </button>
-        ) : (
-          <button id="btn-next-joke" onClick={nextJoke} className="btn btn-secondary">
-            <RefreshCw size={16} /> Next joke
-          </button>
-        )}
-      </div>
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────────
-   QUIZ
-───────────────────────────────────────────── */
-function QuizSection() {
-  const [qIndex, setQIndex] = useState(0);
-  const [selected, setSelected] = useState(null);
-  const [score, setScore] = useState(0);
-  const [finished, setFinished] = useState(false);
-
-  const current = quizQuestions[qIndex];
-
-  const handleSelect = (i) => {
-    if (selected !== null) return;
-    setSelected(i);
-    if (i === current.answer) setScore(s => s + 1);
-    setTimeout(() => {
-      if (qIndex + 1 < quizQuestions.length) {
-        setQIndex(q => q + 1);
-        setSelected(null);
-      } else {
-        setFinished(true);
-      }
-    }, 1400);
-  };
-
-  const restart = () => {
-    setQIndex(0);
-    setSelected(null);
-    setScore(0);
-    setFinished(false);
-  };
-
-  if (finished) {
-    return (
-      <div className="glass-card" style={{ padding: 28, marginBottom: 24, textAlign: 'center' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20, justifyContent: 'center' }}>
-          <span style={{ fontSize: '1.5rem' }}>🧠</span>
-          <h3 className="font-display" style={{ fontSize: '1rem' }}>Funny Quiz</h3>
-        </div>
-        <div className="animate-fade-in-scale">
-          <div style={{ fontSize: '3rem', marginBottom: 12 }}>
-            {score >= 5 ? '🏆' : score >= 3 ? '🎉' : '😅'}
-          </div>
-          <h3 style={{ marginBottom: 8 }}>Quiz complete!</h3>
-          <p style={{ marginBottom: 4 }}>
-            You scored <strong style={{ color: 'var(--color-primary-light)', fontSize: '1.3rem' }}>{score}</strong> / {quizQuestions.length}
-          </p>
-          <p style={{ marginBottom: 24, fontSize: '0.875rem' }}>
-            {score >= 5 ? 'You are officially a chaos expert!' : score >= 3 ? 'Solid relatable energy!' : "At least you're honest 😂"}
-          </p>
-          <button id="btn-restart-quiz" onClick={restart} className="btn btn-primary">
-            <RotateCcw size={16} /> Play again
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="glass-card" style={{ padding: 28, marginBottom: 24 }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontSize: '1.5rem' }}>🧠</span>
-          <h3 className="font-display" style={{ fontSize: '1rem' }}>Funny Quiz</h3>
-        </div>
-        <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{qIndex + 1} / {quizQuestions.length}</span>
-      </div>
-
-      {/* Progress */}
-      <div className="progress-bar" style={{ marginBottom: 20 }}>
-        <div className="progress-fill" style={{ width: `${((qIndex) / quizQuestions.length) * 100}%`, background: 'var(--gradient-primary)' }} />
-      </div>
-
-      <p style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: 20, lineHeight: 1.5 }}>
-        {current.question}
-      </p>
-
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-        {current.options.map((opt, i) => {
-          const isSelected = selected === i;
-          const isCorrect = i === current.answer;
-          let bg = 'rgba(255,255,255,0.04)';
-          let border = 'var(--color-border)';
-          let color = 'var(--color-text-primary)';
-
-          if (selected !== null) {
-            if (isCorrect) { bg = 'rgba(94,207,177,0.15)'; border = 'rgba(94,207,177,0.4)'; color = 'var(--color-accent)'; }
-            else if (isSelected) { bg = 'rgba(231,111,81,0.12)'; border = 'rgba(231,111,81,0.3)'; color = 'var(--color-danger)'; }
-          }
-
-          return (
-            <button
-              key={i}
-              id={`quiz-opt-${qIndex}-${i}`}
-              onClick={() => handleSelect(i)}
-              style={{
-                padding: '12px 16px',
-                background: bg,
-                border: `1px solid ${border}`,
-                borderRadius: 'var(--radius-md)',
-                color,
-                fontSize: '0.875rem',
-                textAlign: 'left',
-                cursor: selected !== null ? 'default' : 'pointer',
-                transition: 'all 0.2s ease',
-                fontFamily: 'var(--font-body)',
-              }}
-            >
-              {opt}
-            </button>
-          );
-        })}
-      </div>
-
-      {selected !== null && (
-        <div className="animate-fade-in" style={{ marginTop: 16, padding: '10px 14px', background: 'rgba(124,92,191,0.1)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(124,92,191,0.2)', fontSize: '0.83rem', lineHeight: 1.6 }}>
-          💬 {current.fun}
-        </div>
-      )}
-    </div>
-  );
-}
 
 /* ─────────────────────────────────────────────
    MEMORY CARD FLIP GAME
@@ -298,153 +117,46 @@ function MemoryGame() {
 }
 
 /* ─────────────────────────────────────────────
-   REACTION SPEED GAME
-───────────────────────────────────────────── */
-function ReactionGame() {
-  const [phase, setPhase] = useState('idle'); // idle | waiting | ready | result
-  const [startTime, setStartTime] = useState(null);
-  const [reactionTime, setReactionTime] = useState(null);
-  const [bestTime, setBestTime] = useState(null);
-  const timerRef = useState(null);
-
-  const startGame = () => {
-    setPhase('waiting');
-    setReactionTime(null);
-    const delay = 1500 + Math.random() * 3000;
-    timerRef[1](setTimeout(() => {
-      setStartTime(Date.now());
-      setPhase('ready');
-    }, delay));
-  };
-
-  const handleTap = () => {
-    if (phase === 'waiting') {
-      // Too early
-      clearTimeout(timerRef[0]);
-      setPhase('idle');
-      setReactionTime('too_early');
-      return;
-    }
-    if (phase === 'ready') {
-      const rt = Date.now() - startTime;
-      setReactionTime(rt);
-      if (!bestTime || rt < bestTime) setBestTime(rt);
-      setPhase('result');
-    }
-  };
-
-  const getLabel = (rt) => {
-    if (rt < 200) return { label: '⚡ Lightning fast!', color: 'var(--color-accent)' };
-    if (rt < 300) return { label: '🚀 Great reflexes!', color: 'var(--color-primary-light)' };
-    if (rt < 450) return { label: '👍 Pretty good!', color: 'var(--color-warning)' };
-    return { label: '🙂 Keep practising!', color: 'var(--color-text-secondary)' };
-  };
-
-  const bgColor = {
-    idle: 'rgba(124,92,191,0.1)',
-    waiting: 'rgba(231,111,81,0.12)',
-    ready: 'rgba(94,207,177,0.2)',
-    result: 'rgba(124,92,191,0.1)',
-  }[phase];
-
-  return (
-    <div className="glass-card" style={{ padding: 28, marginBottom: 24 }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontSize: '1.5rem' }}>⚡</span>
-          <h3 className="font-display" style={{ fontSize: '1rem' }}>Reaction Speed</h3>
-        </div>
-        {bestTime && (
-          <span style={{ fontSize: '0.8rem', color: 'var(--color-accent)' }}>Best: {bestTime}ms</span>
-        )}
-      </div>
-
-      <button
-        id="btn-reaction-tap"
-        onClick={phase === 'idle' || phase === 'result' ? startGame : handleTap}
-        style={{
-          width: '100%',
-          minHeight: 160,
-          borderRadius: 'var(--radius-xl)',
-          border: `2px solid ${phase === 'ready' ? 'rgba(94,207,177,0.5)' : phase === 'waiting' ? 'rgba(231,111,81,0.3)' : 'rgba(124,92,191,0.3)'}`,
-          background: bgColor,
-          cursor: 'pointer',
-          display: 'flex', flexDirection: 'column',
-          alignItems: 'center', justifyContent: 'center',
-          gap: 10, transition: 'all 0.15s ease',
-          fontFamily: 'var(--font-body)',
-        }}
-      >
-        {phase === 'idle' && (
-          <>
-            <Zap size={32} color="var(--color-primary-light)" />
-            <p style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--color-text-primary)', margin: 0 }}>Tap to Start</p>
-            <p style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', margin: 0 }}>Wait for green, then tap as fast as you can!</p>
-          </>
-        )}
-        {phase === 'waiting' && (
-          <>
-            <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'var(--color-danger)', boxShadow: '0 0 20px rgba(231,111,81,0.6)' }} />
-            <p style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--color-danger)', margin: 0 }}>Wait…</p>
-            <p style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', margin: 0 }}>Don't tap yet!</p>
-          </>
-        )}
-        {phase === 'ready' && (
-          <>
-            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--color-accent)', boxShadow: '0 0 30px rgba(94,207,177,0.8)', animation: 'glow-pulse 0.3s ease' }} />
-            <p style={{ fontWeight: 800, fontSize: '1.4rem', color: 'var(--color-accent)', margin: 0 }}>TAP NOW!</p>
-          </>
-        )}
-        {phase === 'result' && (
-          <>
-            {reactionTime === 'too_early' ? (
-              <>
-                <span style={{ fontSize: '2rem' }}>😅</span>
-                <p style={{ fontWeight: 700, color: 'var(--color-danger)', margin: 0 }}>Too early!</p>
-                <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', margin: 0 }}>Tap to try again</p>
-              </>
-            ) : (
-              <>
-                <p style={{ fontWeight: 800, fontSize: '2rem', fontFamily: 'var(--font-display)', color: 'var(--color-text-primary)', margin: 0 }}>{reactionTime}ms</p>
-                <p style={{ fontWeight: 600, margin: 0, ...(() => getLabel(reactionTime))() }}>{getLabel(reactionTime).label}</p>
-                <p style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', margin: 0 }}>Tap to play again</p>
-              </>
-            )}
-          </>
-        )}
-      </button>
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────────
    MAIN FUN ZONE PAGE
 ───────────────────────────────────────────── */
 const tabs = [
-  { id: 'jokes', label: 'Jokes', icon: Laugh, detail: 'A quick laugh and a lighter moment.', color: '#f4a261', Component: JokeSection },
-  { id: 'quiz', label: 'Funny Quiz', icon: Brain, detail: 'A playful quiz with unexpected answers.', color: '#9b83ed', Component: QuizSection },
+  { id: 'skribbl', label: 'Skribbl.io', icon: Paintbrush, detail: 'Draw a secret word while everyone races to guess it.', color: '#f4a261', tag: 'PLAY WITH FRIENDS', href: 'https://skribbl.io/?6nCQUlOM' },
+  { id: 'garticphone', label: 'Gartic Phone', icon: Clapperboard, detail: 'Draw and describe in a telephone-game chain of surprises.', color: '#9b83ed', tag: 'PARTY GAME', href: 'https://garticphone.com/' },
+  { id: 'codenames', label: 'Codenames', icon: MessagesSquare, detail: 'Give clever one-word clues and uncover your team’s cards.', color: '#5ecfb1', tag: 'TEAM STRATEGY', href: 'https://codenames.game/' },
+  { id: 'geoguessr', label: 'GeoGuessr', icon: Globe2, detail: 'Explore a street-view location and guess where you landed.', color: '#72b9e8', tag: 'WORLD EXPLORER', href: 'https://www.geoguessr.com/free' },
   { id: 'memory', label: 'Memory Match', icon: Layers3, detail: 'Match pairs at your own pace.', color: '#5ecfb1', Component: MemoryGame },
-  { id: 'reaction', label: 'Reaction Speed', icon: Timer, detail: 'Wait for green, then test your reflexes.', color: '#ef8b78', Component: ReactionGame },
   { id: 'bubbles', label: 'Worry Bubbles', icon: Wind, detail: 'Let a thought float away with each bubble.', color: '#72b9e8', Component: WorryBubbles },
   { id: 'scramble', label: 'Word Scramble', icon: BookOpen, detail: 'Untangle letters into a word.', color: '#f2c66d', Component: WordScramble },
   { id: 'guess', label: 'Guess the Number', icon: Hash, detail: 'Use clues to find the hidden number.', color: '#f09dc1', Component: GuessNumber },
   { id: 'tictactoe', label: 'Tic Tac Toe', icon: CircleDot, detail: 'A familiar little strategy challenge.', color: '#8fd6c4', Component: TicTacToe },
   { id: 'simon', label: 'Simon Says', icon: AudioLines, detail: 'Watch, listen, and repeat the pattern.', color: '#b99af5', Component: SimonGame },
-  { id: 'dice', label: 'Dice Duel', icon: Dices, detail: 'Roll the dice and see what happens.', color: '#f4a261', Component: DiceRoll },
   { id: 'drums', label: 'Drum Kit', icon: Drum, detail: 'Tap out a rhythm of your own.', color: '#e982a8', Component: DrumKit },
   { id: 'music', label: 'Find Music', icon: Music2, detail: 'Choose a language and genre for your music search.', color: '#6fcdb5', Component: MusicFinder },
 ];
 
 // Best-fit games for each mood come first (marked ✨); the reason is shown to the user.
 const moodGames = {
-  sad:      { picks: ['jokes', 'scramble', 'dice'],         reason: 'A little laughter and a light win can lift a heavy moment.' },
-  stressed: { picks: ['bubbles', 'memory', 'guess'],        reason: 'Pop your worries, then settle into a calm, focused game.' },
-  anxious:  { picks: ['bubbles', 'memory', 'simon'],        reason: 'Gentle focus brings your attention back to the present.' },
-  angry:    { picks: ['drums', 'reaction', 'bubbles'],      reason: 'Drumming and quick reflexes are safe ways to let off steam.' },
-  happy:    { picks: ['quiz', 'tictactoe', 'drums'],        reason: 'Keep the good energy going with something playful.' },
-  calm:     { picks: ['scramble', 'guess', 'memory'],       reason: 'A light brain teaser suits a relaxed mind.' },
-  bored:    { picks: ['simon', 'tictactoe', 'scramble'],    reason: 'A quick challenge is a great cure for boredom.' },
+  sad:      { picks: ['garticphone', 'geoguessr', 'scramble'], reason: 'Try a playful group game, explore somewhere new, or solve a word puzzle.' },
+  stressed: { picks: ['bubbles', 'memory', 'geoguessr'], reason: 'Release a thought, focus on a gentle puzzle, or take a virtual trip.' },
+  anxious:  { picks: ['bubbles', 'memory', 'codenames'], reason: 'Try a grounding game, a quiet matching puzzle, or a team challenge.' },
+  angry:    { picks: ['drums', 'skribbl', 'bubbles'], reason: 'Make some noise, draw something silly, or let a worry float away.' },
+  happy:    { picks: ['skribbl', 'garticphone', 'codenames'], reason: 'Share the good mood with creative and collaborative games.' },
+  calm:     { picks: ['geoguessr', 'scramble', 'memory'], reason: 'Explore, solve a word puzzle, or play a gentle matching game.' },
+  bored:    { picks: ['garticphone', 'geoguessr', 'tictactoe'], reason: 'Jump into a party game, explore the world, or challenge a friend.' },
 };
+
+function ExternalGamePanel({ game }) {
+  const Icon = game.icon;
+  return <section className="glass-card" style={{ padding: 28, borderColor: `${game.color}55`, background: `linear-gradient(135deg, ${game.color}18, rgba(124,92,191,0.08))` }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 12 }}>
+      <span style={{ width: 54, height: 54, display: 'grid', placeItems: 'center', borderRadius: 17, color: game.color, background: `${game.color}20` }}><Icon size={28} /></span>
+      <div><span style={{ color: game.color, fontSize: '0.68rem', fontWeight: 800, letterSpacing: '0.08em' }}>{game.tag}</span><h3 className="font-display" style={{ fontSize: '1.25rem', margin: '4px 0 0' }}>{game.label}</h3></div>
+    </div>
+    <p style={{ color: 'var(--color-text-secondary)', marginBottom: 18 }}>{game.detail}</p>
+    <a href={game.href} target="_blank" rel="noreferrer" className="btn btn-primary"><ExternalLink size={16} /> Open {game.label}</a>
+    <p style={{ color: 'var(--color-text-muted)', fontSize: '0.74rem', margin: '14px 0 0' }}>This game opens on its own website in a new tab.</p>
+  </section>;
+}
 
 function MusicFinder({ mood }) {
   const [language, setLanguage] = useState('Any language');
@@ -478,10 +190,11 @@ function MusicFinder({ mood }) {
 }
 
 export default function FunZone() {
-  const [activeTab, setActiveTab] = useState('jokes');
+  const [activeTab, setActiveTab] = useState('memory');
   const [mood, setMood] = useState('');
   const moodPlan = moodGames[mood];
-  const ActiveGame = tabs.find((t) => t.id === activeTab)?.Component || JokeSection;
+  const activeActivity = tabs.find((t) => t.id === activeTab) || tabs[0];
+  const ActiveGame = activeActivity.href ? ExternalGamePanel : activeActivity.Component;
 
   const handleMoodChange = useCallback((value) => {
     setMood(value);
@@ -490,6 +203,8 @@ export default function FunZone() {
 
   const launchActivity = (id) => {
     setActiveTab(id);
+    const activity = tabs.find((item) => item.id === id);
+    if (activity?.href) window.open(activity.href, '_blank', 'noopener,noreferrer');
     window.requestAnimationFrame(() => document.getElementById('activity-player')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
   };
 
@@ -502,7 +217,7 @@ export default function FunZone() {
         title="Fun Zone 🎮"
         subtitle={<>{moodPlan
             ? <>Picked for feeling <strong style={{ color: 'var(--color-accent)' }}>{mood}</strong>: {moodPlan.reason}</>
-            : 'Take a break. Laugh a little. Play a game. You deserve it.'}</>}
+            : 'Take a break. Try a new challenge, explore with friends, or find a soundtrack.'}</>}
       />
       <WellnessActivities onMoodChange={handleMoodChange} />
 
@@ -538,7 +253,7 @@ export default function FunZone() {
       </section>
 
       <div id="activity-player" key={activeTab} className="animate-fade-in-scale" style={{ scrollMarginTop: 24 }}>
-        <ActiveGame mood={mood} />
+        <ActiveGame mood={mood} game={activeActivity} />
       </div>
 
       {/* Footer note */}
