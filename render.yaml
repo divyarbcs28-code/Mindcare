@@ -28,12 +28,19 @@ services:
       - key: PYTHON_VERSION
         value: 3.10.12
 
-  # React Frontend (Static Site)
-  - type: static
+  # React Frontend (Static Site on Render)
+  - type: web
     name: mindcare-frontend
+    runtime: static
     buildCommand: npm run build
     staticPublishPath: dist
     routes:
       - type: rewrite
         source: /*
         destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: mindcare-backend
+          property: host
