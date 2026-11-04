@@ -33,8 +33,10 @@
   /* Gradients */
   --gradient-primary: linear-gradient(135deg, #7C5CBF 0%, #5ECFB1 100%);
   --gradient-card: linear-gradient(145deg, rgba(124,92,191,0.12) 0%, rgba(94,207,177,0.06) 100%);
-  --gradient-bg: radial-gradient(ellipse at 20% 20%, rgba(124,92,191,0.08) 0%, transparent 60%),
-                  radial-gradient(ellipse at 80% 80%, rgba(94,207,177,0.05) 0%, transparent 60%);
+  --gradient-bg: radial-gradient(ellipse at 14% 8%, rgba(137,99,224,0.22) 0%, transparent 38%),
+                  radial-gradient(ellipse at 88% 22%, rgba(76,146,202,0.16) 0%, transparent 34%),
+                  radial-gradient(ellipse at 76% 90%, rgba(72,190,162,0.14) 0%, transparent 38%),
+                  linear-gradient(135deg, #0a0b19 0%, #111127 52%, #09131d 100%);
 
   /* Typography */
   --font-body: 'Inter', system-ui, sans-serif;
@@ -89,14 +91,22 @@ html {
 
 body {
   font-family: var(--font-body);
-  background-color: var(--color-bg);
+  background-color: #0a0b19;
   color: var(--color-text-primary);
   min-height: 100vh;
   background-image: var(--gradient-bg);
+  background-size: 140% 140%, 145% 145%, 145% 145%, 100% 100%;
+  background-position: 0% 0%, 100% 0%, 80% 100%, 0 0;
   background-attachment: fixed;
+  animation: global-atmosphere 34s ease-in-out infinite alternate;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+}
+
+@keyframes global-atmosphere {
+  from { background-position: 0% 0%, 100% 0%, 80% 100%, 0 0; }
+  to { background-position: 10% 7%, 88% 10%, 68% 90%, 0 0; }
 }
 
 #root {

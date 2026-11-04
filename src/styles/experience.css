@@ -116,8 +116,8 @@
 }
 
 @keyframes ambient-drift {
-  0%, 100% { background-position: 0% 0%, 100% 100%; }
-  50% { background-position: 12% 8%, 88% 92%; }
+  0%, 100% { background-position: 0% 0%, 100% 0%, 85% 100%, 0 0, 0 0, 0 0; }
+  50% { background-position: 12% 8%, 88% 12%, 68% 88%, 0 0, 0 0, 0 0; }
 }
 
 /* A slow, low-contrast glow carries the landing page atmosphere into every app screen. */
@@ -132,9 +132,13 @@
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(ellipse at 0% 0%, rgba(124, 92, 191, 0.12), transparent 38%),
-    radial-gradient(ellipse at 100% 100%, rgba(94, 207, 177, 0.08), transparent 34%);
-  background-size: 125% 125%, 125% 125%;
+    radial-gradient(ellipse at 0% 0%, rgba(137, 99, 224, 0.18), transparent 38%),
+    radial-gradient(ellipse at 100% 12%, rgba(76, 146, 202, 0.12), transparent 32%),
+    radial-gradient(ellipse at 78% 100%, rgba(72, 190, 162, 0.11), transparent 36%),
+    linear-gradient(135deg, rgba(10, 11, 25, 0.18), rgba(12, 17, 29, 0.28)),
+    repeating-linear-gradient(0deg, transparent 0 67px, rgba(213, 220, 255, 0.012) 68px),
+    repeating-linear-gradient(90deg, transparent 0 67px, rgba(213, 220, 255, 0.012) 68px);
+  background-size: 140% 140%, 140% 140%, 140% 140%, 100% 100%, 68px 68px, 68px 68px;
   animation: ambient-drift 24s ease-in-out infinite;
 }
 
