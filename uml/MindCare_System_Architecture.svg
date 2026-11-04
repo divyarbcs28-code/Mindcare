@@ -1,0 +1,196 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1400" viewBox="0 0 1920 1400" role="img" aria-labelledby="title desc">
+  <title id="title">MindCare System Architecture</title>
+  <desc id="desc">Architecture of the implemented MindCare application, showing the React frontend, Express API, FastAPI machine learning service, MongoDB persistence, security and configuration, and the voice reflection flow.</desc>
+  <defs>
+    <style>
+      text { font-family: Arial, Helvetica, sans-serif; fill: #172b4d; }
+      .title { font-size: 32px; font-weight: 700; }
+      .subtitle { font-size: 15px; fill: #52627a; }
+      .section { fill: #f6f8fc; stroke: #42648e; stroke-width: 2; }
+      .section-head { font-size: 17px; font-weight: 700; letter-spacing: .3px; }
+      .card { fill: #fff; stroke: #6c83a0; stroke-width: 1.5; }
+      .cardhead { font-size: 17px; font-weight: 700; }
+      .body { font-size: 15px; }
+      .small { font-size: 13px; fill: #344761; }
+      .tiny { font-size: 12px; fill: #344761; }
+      .label { font-size: 13px; font-weight: 600; fill: #385679; }
+      .accent { fill: #eaf2fb; stroke: #5279a7; stroke-width: 1.4; }
+      .green { fill: #edf7f3; stroke: #5b927d; stroke-width: 1.4; }
+      .orange { fill: #fff5e8; stroke: #c38a42; stroke-width: 1.4; }
+      .line { fill: none; stroke: #42648e; stroke-width: 2; marker-end: url(#arrow); }
+      .lineboth { fill: none; stroke: #42648e; stroke-width: 2; marker-end: url(#arrow); }
+      .dashed { fill: none; stroke: #6384aa; stroke-width: 1.7; stroke-dasharray: 7 6; marker-end: url(#arrow); }
+      .rule { stroke: #cbd5e1; stroke-width: 1; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto"><path d="M0,0 L10,4 L0,8 Z" fill="#42648e"/></marker>
+    <marker id="arrowStart" markerWidth="10" markerHeight="8" refX="1" refY="4" orient="auto"><path d="M10,0 L0,4 L10,8 Z" fill="#42648e"/></marker>
+  </defs>
+  <rect width="1920" height="1400" fill="#ffffff"/>
+  <text x="42" y="48" class="title">MindCare — System Architecture</text>
+  <text x="44" y="76" class="subtitle">Current implementation · React + Express + FastAPI + MongoDB · wellbeing reflection and support</text>
+  <line x1="42" y1="91" x2="1878" y2="91" class="rule"/>
+
+  <!-- 1. Presentation layer -->
+  <rect x="36" y="108" width="1434" height="224" rx="12" class="section"/>
+  <text x="56" y="137" class="section-head">1  PRESENTATION LAYER  ·  React 19 + Vite</text>
+  <rect x="56" y="153" width="430" height="157" rx="9" class="card"/>
+  <text x="74" y="180" class="cardhead">Reflection workspace</text>
+  <line x1="72" y1="190" x2="470" y2="190" class="rule"/>
+  <text x="76" y="216" class="body">• Typed reflection and voice recording</text>
+  <text x="76" y="241" class="body">• Transcript review before voice confirmation</text>
+  <text x="76" y="266" class="body">• Separate emotion and sentiment results</text>
+  <text x="76" y="291" class="body">• Reflection history and insight views</text>
+
+  <rect x="514" y="153" width="430" height="157" rx="9" class="card"/>
+  <text x="532" y="180" class="cardhead">Wellbeing pages</text>
+  <line x1="530" y1="190" x2="928" y2="190" class="rule"/>
+  <text x="534" y="216" class="body">• Home and manual mood check-in</text>
+  <text x="534" y="241" class="body">• Fun Zone activities and progress</text>
+  <text x="534" y="266" class="body">• Profile and quick support</text>
+  <text x="534" y="291" class="body">• Login, registration and navigation</text>
+
+  <rect x="972" y="153" width="478" height="157" rx="9" class="card"/>
+  <text x="990" y="180" class="cardhead">Browser integration</text>
+  <line x1="988" y1="190" x2="1434" y2="190" class="rule"/>
+  <text x="992" y="216" class="body">• React Router pages and reusable components</text>
+  <text x="992" y="241" class="body">• API service modules and authenticated requests</text>
+  <text x="992" y="266" class="body">• Audio capture, local state and storage hooks</text>
+  <text x="992" y="291" class="body">• JSON requests and multipart audio uploads</text>
+
+  <!-- Cross-cutting -->
+  <rect x="1492" y="108" width="392" height="982" rx="12" fill="#f8fafc" stroke="#526d8c" stroke-width="2"/>
+  <text x="1512" y="139" class="section-head">CROSS-CUTTING</text>
+  <text x="1512" y="162" class="section-head">SECURITY &amp; CONFIGURATION</text>
+  <line x1="1510" y1="176" x2="1866" y2="176" class="rule"/>
+  <text x="1516" y="208" class="body">Authentication</text>
+  <text x="1524" y="234" class="small">• Passwords hashed with bcryptjs</text>
+  <text x="1524" y="256" class="small">• Signed tokens for protected requests</text>
+  <text x="1524" y="278" class="small">• Reflection records scoped to the user</text>
+  <text x="1516" y="319" class="body">Service boundary</text>
+  <text x="1524" y="345" class="small">• Optional X-API-Key between backend</text>
+  <text x="1538" y="365" class="small">and ML service</text>
+  <text x="1524" y="389" class="small">• Health endpoints report service state</text>
+  <text x="1524" y="411" class="small">• Errors returned when analysis is unavailable</text>
+  <text x="1516" y="453" class="body">Deployment settings</text>
+  <text x="1524" y="479" class="small">• MONGO_URI — database connection</text>
+  <text x="1524" y="501" class="small">• ML_SERVICE_URL — inference service</text>
+  <text x="1524" y="523" class="small">• AUTH_TOKEN_SECRET — signed tokens</text>
+  <text x="1524" y="545" class="small">• PORT — Express API port</text>
+  <rect x="1514" y="585" width="348" height="112" rx="8" class="orange"/>
+  <text x="1530" y="612" class="cardhead">Model transparency</text>
+  <text x="1530" y="638" class="small">English-focused text models. Emotion</text>
+  <text x="1530" y="659" class="small">and sentiment are estimates, not diagnoses.</text>
+  <text x="1530" y="680" class="small">Confidence values come from model output.</text>
+  <rect x="1514" y="719" width="348" height="118" rx="8" class="accent"/>
+  <text x="1530" y="746" class="cardhead">Separate services</text>
+  <text x="1530" y="772" class="small">Frontend, Express API, FastAPI inference,</text>
+  <text x="1530" y="793" class="small">and MongoDB are independently configured.</text>
+  <text x="1530" y="814" class="small">The backend can report ML unavailability.</text>
+  <text x="1516" y="870" class="tiny">Only implemented components and flows</text>
+  <text x="1516" y="889" class="tiny">are shown in this diagram.</text>
+
+  <!-- Connector from UI to API -->
+  <path d="M730 332 V358" class="line"/>
+  <path d="M770 358 V332" class="line"/>
+  <text x="790" y="342" class="label">request ↓</text>
+  <text x="790" y="359" class="label">response ↑</text>
+
+  <!-- 2. API layer -->
+  <rect x="36" y="364" width="1434" height="218" rx="12" class="section"/>
+  <text x="56" y="393" class="section-head">2  APPLICATION API &amp; AUTHENTICATION  ·  Node.js + Express</text>
+  <rect x="56" y="410" width="642" height="151" rx="9" class="card"/>
+  <text x="76" y="438" class="cardhead">Request handling</text>
+  <line x1="74" y1="448" x2="680" y2="448" class="rule"/>
+  <text x="78" y="475" class="body">• CORS and JSON request parsing</text>
+  <text x="78" y="501" class="body">• Input checks and response handling</text>
+  <text x="78" y="527" class="body">• Forwards text and audio to configured ML service</text>
+  <text x="78" y="549" class="small">• Removes temporary uploaded audio after forwarding</text>
+
+  <rect x="726" y="410" width="724" height="151" rx="9" class="card"/>
+  <text x="746" y="438" class="cardhead">REST API route groups</text>
+  <line x1="744" y1="448" x2="1432" y2="448" class="rule"/>
+  <text x="750" y="475" class="body">/auth · /users · /moods · /reflections</text>
+  <text x="750" y="501" class="body">/activities · /insights · /safety</text>
+  <text x="750" y="527" class="small">Protected reflection save, confirmation and history endpoints</text>
+  <text x="750" y="549" class="small">Mood, activity, profile, insight and safety operations</text>
+
+  <!-- Connectors from API to ML and data -->
+  <path d="M450 582 V604" class="line"/>
+  <path d="M490 604 V582" class="line"/>
+  <text x="515" y="599" class="label">request ↓  ·  result ↑</text>
+
+  <!-- 3. ML -->
+  <rect x="36" y="610" width="1434" height="226" rx="12" class="section"/>
+  <text x="56" y="639" class="section-head">3  ANALYSIS SERVICE  ·  Python + FastAPI</text>
+  <rect x="56" y="656" width="412" height="160" rx="9" class="card"/>
+  <text x="76" y="684" class="cardhead">Text analysis</text>
+  <line x1="74" y1="694" x2="450" y2="694" class="rule"/>
+  <text x="78" y="722" class="body">• DistilRoBERTa emotion classifier</text>
+  <text x="78" y="748" class="body">• DistilBERT positive / negative sentiment</text>
+  <text x="78" y="774" class="body">• Separate labels and model confidence</text>
+  <text x="78" y="800" class="small">• English text validation</text>
+
+  <rect x="490" y="656" width="438" height="160" rx="9" class="card"/>
+  <text x="510" y="684" class="cardhead">Speech and audio</text>
+  <line x1="508" y1="694" x2="910" y2="694" class="rule"/>
+  <text x="512" y="722" class="body">• Whisper English speech recognition</text>
+  <text x="512" y="748" class="body">• Audio decoding and 16 kHz resampling</text>
+  <text x="512" y="774" class="body">• Pitch, energy and pause features</text>
+  <text x="512" y="800" class="small">• Voice analysis status and feature response</text>
+
+  <rect x="950" y="656" width="500" height="160" rx="9" class="card"/>
+  <text x="970" y="684" class="cardhead">Implemented inference endpoints</text>
+  <line x1="968" y1="694" x2="1432" y2="694" class="rule"/>
+  <text x="972" y="722" class="body">POST /analyze-text · POST /transcribe</text>
+  <text x="972" y="748" class="body">POST /analyze-voice · POST /analyze-sentiment</text>
+  <text x="972" y="774" class="body">GET /health</text>
+  <text x="972" y="800" class="small">Returns service / model errors when unavailable</text>
+
+  <!-- 4. Data -->
+  <rect x="36" y="862" width="1434" height="228" rx="12" class="section"/>
+  <text x="56" y="891" class="section-head">4  DATA PERSISTENCE  ·  MongoDB + Mongoose</text>
+  <rect x="56" y="908" width="1394" height="160" rx="9" class="green"/>
+  <text x="78" y="938" class="cardhead">Application records defined by current models</text>
+  <line x1="76" y1="949" x2="1430" y2="949" stroke="#b8d5c9" stroke-width="1"/>
+  <text x="82" y="978" class="body">Users · Reflections · AnalysisResults · MoodEntries</text>
+  <text x="82" y="1007" class="body">Activities · UserActivities · ActivitySessions · Insights · Recommendations</text>
+  <text x="82" y="1036" class="body">UserPreferences · UserBadges · SafetyFlags · EmergencyContacts · PersonalBaselines</text>
+
+  <!-- Explicit Mongoose request and query-result paths route around the inference layer. -->
+  <path d="M1440 500 H1478 V982 H1450" class="line"/>
+  <path d="M1450 1010 H1462 V520 H1430" class="line"/>
+  <text x="1190" y="604" class="label">Mongoose write ↓  ·  query result ↑</text>
+
+  <!-- Typed reflection flow annotation -->
+  <rect x="36" y="1106" width="1848" height="52" rx="9" class="accent"/>
+  <text x="58" y="1138" class="body"><tspan font-weight="700">TYPED REFLECTION:</tspan> Browser submits text → Express validates → FastAPI returns emotion and sentiment → authenticated save stores Reflection + AnalysisResult → result appears in the app.</text>
+
+  <!-- Voice reflection workflow -->
+  <text x="42" y="1197" class="section-head">VOICE REFLECTION  ·  two-step review and confirmation flow</text>
+  <line x1="42" y1="1208" x2="1878" y2="1208" class="rule"/>
+  <g>
+    <rect x="42" y="1227" width="242" height="112" rx="9" class="card"/>
+    <text x="58" y="1254" class="cardhead">1  Record</text>
+    <text x="58" y="1280" class="small">Browser captures</text><text x="58" y="1300" class="small">reflection audio</text>
+    <rect x="306" y="1227" width="242" height="112" rx="9" class="card"/>
+    <text x="322" y="1254" class="cardhead">2  Upload</text>
+    <text x="322" y="1280" class="small">POST /api/reflections/</text><text x="322" y="1300" class="small">transcribe</text>
+    <rect x="570" y="1227" width="242" height="112" rx="9" class="card"/>
+    <text x="586" y="1254" class="cardhead">3  Transcribe</text>
+    <text x="586" y="1280" class="small">FastAPI + Whisper</text><text x="586" y="1300" class="small">and audio features</text>
+    <rect x="834" y="1227" width="242" height="112" rx="9" class="orange"/>
+    <text x="850" y="1254" class="cardhead">4  Review</text>
+    <text x="850" y="1280" class="small">Transcript returned</text><text x="850" y="1300" class="small">for user review / edits</text>
+    <rect x="1098" y="1227" width="242" height="112" rx="9" class="card"/>
+    <text x="1114" y="1254" class="cardhead">5  Confirm + analyze</text>
+    <text x="1114" y="1280" class="small">Signed request → text</text><text x="1114" y="1300" class="small">analysis endpoint</text>
+    <rect x="1362" y="1227" width="242" height="112" rx="9" class="green"/>
+    <text x="1378" y="1254" class="cardhead">6  Save</text>
+    <text x="1378" y="1280" class="small">Reflection + analysis</text><text x="1378" y="1300" class="small">stored in MongoDB</text>
+    <rect x="1626" y="1227" width="242" height="112" rx="9" class="card"/>
+    <text x="1642" y="1254" class="cardhead">7  Display</text>
+    <text x="1642" y="1280" class="small">Results returned;</text><text x="1642" y="1300" class="small">history loads by API</text>
+    <path d="M284 1283 H300 M548 1283 H564 M812 1283 H828 M1076 1283 H1092 M1340 1283 H1356 M1604 1283 H1620" class="line"/>
+  </g>
+  <text x="44" y="1372" class="tiny">MindCare architecture · Based on the current project source · Model results are estimates, not clinical diagnoses</text>
+</svg>

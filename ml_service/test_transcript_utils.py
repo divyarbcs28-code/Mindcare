@@ -1,4 +1,4 @@
-from transcript_utils import WHISPER_TO_NLLB_LANGUAGE, is_transcript_valid
+from transcript_utils import WHISPER_TO_NLLB_LANGUAGE, guess_text_language, is_transcript_valid
 
 
 def test_rejects_empty_transcript():
@@ -15,6 +15,18 @@ def test_accepts_normal_sentence():
 
 def test_rejects_low_language_probability():
     assert not is_transcript_valid("This is a complete sentence.", 0.49)
+
+
+def test_rejects_punctuation_only_text():
+    assert not is_transcript_valid("!!!")
+
+
+def test_rejects_non_string_input():
+    assert not is_transcript_valid(None)
+
+
+def test_detects_indian_scripts_in_typed_text():
+    assert guess_text_language("नमस्ते, मैं अच्छे हूँ") == "hi"
 
 
 def test_supported_whisper_to_nllb_language_mapping():

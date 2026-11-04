@@ -1,4 +1,21 @@
 services:
+  # Node.js Express Backend
+  - type: web
+    name: mindcare-backend
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node backend/server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: MONGO_URI
+        value: mongodb+srv://Divyar:Ramkoki07@cluster0.45vnhds.mongodb.net/mindcare?appName=Cluster0
+      - key: AUTH_TOKEN_SECRET
+        generateValue: true
+      - key: PORT
+        value: 5003
+
+  # Python FastAPI ML Service
   - type: web
     name: mindcare-ml-service
     runtime: python
@@ -10,3 +27,13 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.10.12
+
+  # React Frontend (Static Site)
+  - type: static
+    name: mindcare-frontend
+    buildCommand: npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

@@ -14,12 +14,19 @@ WHISPER_TO_NLLB_LANGUAGE = {
 
 def is_transcript_valid(text: str, language_probability: float | None = None) -> bool:
     """Return whether a transcript is long enough, non-repetitive, and confidently detected."""
-    if not text or len(text.strip()) < 3:
+    if not isinstance(text, str):
+        return False
+
+    stripped = text.strip()
+    if not stripped or len(stripped) < 3:
         return False
     if language_probability is not None and language_probability < 0.5:
         return False
 
     words = re.findall(r"\b[\w’'-]+\b", text.casefold())
+    if not words:
+        return False
+
     for phrase_length in range(1, len(words) // 4 + 1):
         for start in range(len(words) - phrase_length * 4 + 1):
             phrase = words[start:start + phrase_length]
@@ -35,6 +42,9 @@ def is_transcript_valid(text: str, language_probability: float | None = None) ->
 
 def guess_text_language(text: str) -> str:
     """Guess one of the supported Indian scripts in typed text; default to English."""
+    if not isinstance(text, str):
+        return "en"
+
     script_ranges = (
         ("ta", "\u0b80", "\u0bff"),
         ("hi", "\u0900", "\u097f"),

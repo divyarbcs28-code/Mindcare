@@ -10,6 +10,10 @@ import { requireActivityAuth as requireAuth } from '../middleware/activityAuth.j
 const router = express.Router();
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://127.0.0.1:8000';
 const ML_SERVICE_TIMEOUT = Number(process.env.ML_SERVICE_TIMEOUT) || 120000;
+// Sent on every ML request; must match ML_SERVICE_API_KEY on the ML server when it is set there.
+const mlClient = axios.create({
+  headers: process.env.ML_SERVICE_API_KEY ? { 'X-API-Key': process.env.ML_SERVICE_API_KEY } : {},
+});
 
 function mlUnavailableMessage(error) {
   if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
@@ -51,7 +55,7 @@ function buildFusionMessage(emotion, sentiment, featuresExtracted) {
 // ML Service Health Check
 router.get('/health', async (req, res) => {
   try {
-    const pyRes = await axios.get(`${ML_SERVICE_URL}/health`, { timeout: 3000 });
+    const pyRes = await mlClient.get(`${ML_SERVICE_URL}/health`, { timeout: 3000 });
     res.json({
       status: 'ok',
       node_backend: 'healthy',
@@ -78,7 +82,7 @@ router.post('/analyze-text', async (req, res) => {
       return res.status(400).json({ error: 'Text cannot be empty.' });
     }
 
-    const pyRes = await axios.post(`${ML_SERVICE_URL}/analyze-text`, {
+    const pyRes = await mlClient.post(`${ML_SERVICE_URL}/analyze-text`, {
       text: text.trim(),
       language,
     }, { timeout: 60000 });
@@ -109,7 +113,7 @@ router.post('/transcribe', upload.single('audio'), async (req, res) => {
     });
     formData.append('language', req.body.language || 'auto');
 
-    const pyRes = await axios.post(`${ML_SERVICE_URL}/transcribe`, formData, {
+    const pyRes = await mlClient.post(`${ML_SERVICE_URL}/transcribe`, formData, {
       headers: formData.getHeaders(),
       timeout: ML_SERVICE_TIMEOUT,
       maxBodyLength: Infinity,
@@ -156,7 +160,7 @@ router.post('/confirm-voice', requireAuth, async (req, res) => {
     }
 
     const text = transcript.trim();
-    const pyRes = await axios.post(`${ML_SERVICE_URL}/analyze-text`, {
+    const pyRes = await mlClient.post(`${ML_SERVICE_URL}/analyze-text`, {
       text,
       language,
     }, { timeout: 60000 });
@@ -246,7 +250,7 @@ router.post('/', requireAuth, upload.single('audio'), async (req, res) => {
         });
         formData.append('language', req.body.language || 'auto');
 
-        const pyRes = await axios.post(`${ML_SERVICE_URL}/analyze-voice`, formData, {
+        const pyRes = await mlClient.post(`${ML_SERVICE_URL}/analyze-voice`, formData, {
           headers: formData.getHeaders(),
           timeout: ML_SERVICE_TIMEOUT,
         });
@@ -367,7 +371,7 @@ router.post('/', requireAuth, upload.single('audio'), async (req, res) => {
       let mlResponse;
 
       try {
-        const pyRes = await axios.post(`${ML_SERVICE_URL}/analyze-text`, {
+        const pyRes = await mlClient.post(`${ML_SERVICE_URL}/analyze-text`, {
           text,
           language: req.body.language || 'auto',
         }, { timeout: 60000 });

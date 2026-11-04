@@ -1,5 +1,6 @@
-import { ExternalLink, Phone, Heart, Shield, Brain, Users, Mic, Zap, Link } from 'lucide-react';
+import { ExternalLink, Phone, Heart, Shield, Brain, Users, Mic, Zap, Link, UserCheck } from 'lucide-react';
 import PageHero from '../components/shared/PageHero';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 const crisisResources = [
   { name: 'iCall India', contact: '9152987821', type: 'Phone', desc: 'Psychosocial support helpline by TISS' },
@@ -16,6 +17,9 @@ const techContributions = [
 ];
 
 export default function About() {
+  const [user] = useLocalStorage('mindcare_user_data', null);
+  const emergencyContact = user?.emergencyContact;
+
   return (
     <div className="animate-fade-in">
       <PageHero
@@ -42,6 +46,50 @@ export default function About() {
             <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Real support from trained professionals — not an AI</p>
           </div>
         </div>
+
+        {/* User's Stored Emergency Contact from Database */}
+        {emergencyContact && (emergencyContact.contactName || emergencyContact.name) && (
+          <div style={{
+            marginBottom: 16,
+            padding: '14px 18px',
+            background: 'rgba(94,207,177,0.12)',
+            borderRadius: 'var(--radius-md)',
+            border: '1px solid rgba(94,207,177,0.35)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: 12,
+          }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
+                <UserCheck size={16} color="var(--color-accent)" />
+                <span style={{ fontWeight: 700, color: 'var(--color-accent)', fontSize: '0.9rem' }}>
+                  Your Emergency Contact: {emergencyContact.contactName || emergencyContact.name}
+                </span>
+                <span className="chip" style={{ fontSize: '0.7rem', padding: '2px 8px' }}>
+                  {emergencyContact.relationship || emergencyContact.relation || 'Contact'}
+                </span>
+              </div>
+              <p style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', margin: 0 }}>
+                Saved in your database profile for urgent crisis assistance
+              </p>
+            </div>
+            <a
+              href={`tel:${emergencyContact.phoneNumber || emergencyContact.phone}`}
+              className="btn btn-secondary"
+              style={{
+                borderColor: 'rgba(94,207,177,0.4)',
+                color: 'var(--color-accent)',
+                padding: '8px 14px',
+                fontSize: '0.85rem',
+                gap: 6
+              }}
+            >
+              <Phone size={14} /> Call {emergencyContact.phoneNumber || emergencyContact.phone}
+            </a>
+          </div>
+        )}
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {crisisResources.map((r, i) => (

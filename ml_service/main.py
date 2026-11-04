@@ -9,6 +9,7 @@ import soundfile as sf
 import torch
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from transformers import pipeline
 
@@ -36,8 +37,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# English-only ".en" Whisper models are more accurate for English than multilingual models of the same size.
-WHISPER_MODEL_ID = os.getenv("WHISPER_MODEL_ID", "openai/whisper-base.en")
+# When the service is exposed publicly (e.g. through a tunnel), require a shared key from the backend.
+# /health stays open so uptime checks and the backend health route keep working.
+ML_SERVICE_API_KEY = os.getenv("ML_SERVICE_API_KEY", "")
+
+
+@app.middleware("http")
+async def require_api_key(request, call_next):
+    if ML_SERVICE_API_KEY and request.url.path != "/health" and request.method != "OPTIONS":
+        if request.headers.get("x-api-key") != ML_SERVICE_API_KEY:
+            return JSONResponse(status_code=401, content={"detail": "Invalid or missing ML service API key."})
+    return await call_next(request)
+
+# Use the smaller English-only Whisper model by default to match the documented deployment
+# expectations and keep the service viable on lower-memory machines.
+WHISPER_MODEL_ID = os.getenv("WHISPER_MODEL_ID", "openai/whisper-tiny")
 # Reflections are English-only: the emotion and sentiment models are English models, and a
 # translation model (NLLB, ~2.5 GB) does not fit in the memory of the target machines.
 REFLECTION_LANGUAGE = "en"

@@ -10,11 +10,18 @@ const userPreferenceSchema = new mongoose.Schema({
       'music',
       'games',
       'journaling',
+      'breathing',
       'breathing_exercises',
+      'social',
       'social_activities',
     ],
   }],
   updatedAt: { type: Date, default: Date.now },
+});
+
+userPreferenceSchema.pre('save', function (next) {
+  this.updatedAt = new Date();
+  next();
 });
 
 export default mongoose.model('UserPreference', userPreferenceSchema);

@@ -19,7 +19,7 @@ export default function Register({ onComplete }) {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState(null); // Added error state for API
+  const [errorMsg, setErrorMsg] = useState(null);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -74,7 +74,7 @@ export default function Register({ onComplete }) {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
-        password: formData.password, // Will be hashed by backend
+        password: formData.password,
         dob: formData.dob,
         gender: formData.gender,
         privacyPreferences: {
@@ -82,11 +82,13 @@ export default function Register({ onComplete }) {
           personalization: formData.privacyConsent,
           emergencyAccess: !!formData.emergencyName
         },
-        // Passing these extra fields so you can update backend routes later if needed
         emergencyContact: formData.emergencyName ? {
           name: formData.emergencyName,
           phone: formData.emergencyPhone,
-          relation: formData.emergencyRelation
+          relation: formData.emergencyRelation || 'Contact',
+          contactName: formData.emergencyName,
+          phoneNumber: formData.emergencyPhone,
+          relationship: formData.emergencyRelation || 'Contact',
         } : null,
         preferences: formData.preferences,
       };
@@ -103,7 +105,6 @@ export default function Register({ onComplete }) {
       const data = await response.json();
 
       if (!response.ok) {
-        // e.g. "User already exists."
         throw new Error(data.error || 'Failed to register account.');
       }
 

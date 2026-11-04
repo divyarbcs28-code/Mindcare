@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
-import { User, Shield, LogOut, Check, ArrowLeft, Phone } from 'lucide-react';
+import { User, Shield, LogOut, Check, ArrowLeft, Phone, AlertCircle } from 'lucide-react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import PageHero from '../components/shared/PageHero';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5003';
 
 export default function Profile() {
   const [user, setUser] = useLocalStorage('mindcare_user_data', null);
   const [loading, setLoading] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   
   // Local form state so we can edit before saving
   const [formData, setFormData] = useState({
@@ -14,58 +17,132 @@ export default function Profile() {
     email: '',
     emergencyName: '',
     emergencyPhone: '',
+    emergencyRelation: '',
     analytics: false,
     personalization: false,
-    emergencyAccess: false
+    emergencyAccess: false,
   });
 
   useEffect(() => {
-    if (user) {
-      setFormData({
-        firstName: user.firstName || '',
-        email: user.email || '',
-        emergencyName: user.emergencyContact?.name || '',
-        emergencyPhone: user.emergencyContact?.phone || '',
-        analytics: user.privacyPreferences?.analytics || false,
-        personalization: user.privacyPreferences?.personalization || false,
-        emergencyAccess: user.privacyPreferences?.emergencyAccess || false,
-      });
+    if (!user) return;
+
+    // First populate from local state
+    setFormData({
+      firstName: user.firstName || '',
+      email: user.email || '',
+      emergencyName: user.emergencyContact?.contactName || user.emergencyContact?.name || '',
+      emergencyPhone: user.emergencyContact?.phoneNumber || user.emergencyContact?.phone || '',
+      emergencyRelation: user.emergencyContact?.relationship || user.emergencyContact?.relation || '',
+      analytics: user.privacyPreferences?.analytics || false,
+      personalization: user.privacyPreferences?.personalization || false,
+      emergencyAccess: user.privacyPreferences?.emergencyAccess || false,
+    });
+
+    // If we have a backend user ID, fetch latest database record
+    if (user._id && !String(user._id).startsWith('local-')) {
+      fetch(`${API_BASE_URL}/api/users/${user._id}/profile`)
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data?.user) {
+            const dbUser = data.user;
+            setFormData({
+              firstName: dbUser.firstName || '',
+              email: dbUser.email || '',
+              emergencyName: dbUser.emergencyContact?.contactName || dbUser.emergencyContact?.name || '',
+              emergencyPhone: dbUser.emergencyContact?.phoneNumber || dbUser.emergencyContact?.phone || '',
+              emergencyRelation: dbUser.emergencyContact?.relationship || dbUser.emergencyContact?.relation || '',
+              analytics: dbUser.privacyPreferences?.analytics || false,
+              personalization: dbUser.privacyPreferences?.personalization || false,
+              emergencyAccess: dbUser.privacyPreferences?.emergencyAccess || false,
+            });
+            // Keep local state synchronized with database
+            setUser((prev) => ({
+              ...prev,
+              firstName: dbUser.firstName,
+              email: dbUser.email,
+              privacyPreferences: dbUser.privacyPreferences,
+              emergencyContact: dbUser.emergencyContact,
+            }));
+          }
+        })
+        .catch((err) => {
+          console.warn('Could not sync profile from database:', err.message);
+        });
     }
-  }, [user]);
+  }, [user?._id]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    setErrorMsg('');
     setFormData(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
   };
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
     setLoading(true);
-    
-    // In a real app, send this to the backend API via PUT /api/users/profile
-    
-    setTimeout(() => {
-      setUser(prev => ({
-        ...prev,
-        firstName: formData.firstName,
-        emergencyContact: formData.emergencyName ? {
-          name: formData.emergencyName,
-          phone: formData.emergencyPhone,
-          relation: prev.emergencyContact?.relation || 'Contact'
-        } : null,
-        privacyPreferences: {
-          analytics: formData.analytics,
-          personalization: formData.personalization,
-          emergencyAccess: formData.emergencyAccess
+    setErrorMsg('');
+    setSaved(false);
+
+    const emergencyPayload = formData.emergencyName?.trim() ? {
+      contactName: formData.emergencyName.trim(),
+      phoneNumber: formData.emergencyPhone?.trim() || '',
+      relationship: formData.emergencyRelation?.trim() || 'Contact',
+      name: formData.emergencyName.trim(),
+      phone: formData.emergencyPhone?.trim() || '',
+      relation: formData.emergencyRelation?.trim() || 'Contact',
+    } : null;
+
+    const updatedUserObj = {
+      ...user,
+      firstName: formData.firstName,
+      emergencyContact: emergencyPayload,
+      privacyPreferences: {
+        analytics: formData.analytics,
+        personalization: formData.personalization,
+        emergencyAccess: formData.emergencyAccess,
+      },
+    };
+
+    try {
+      if (user?._id && !String(user._id).startsWith('local-')) {
+        const response = await fetch(`${API_BASE_URL}/api/users/${user._id}/profile`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            firstName: formData.firstName,
+            privacyPreferences: {
+              analytics: formData.analytics,
+              personalization: formData.personalization,
+              emergencyAccess: formData.emergencyAccess,
+            },
+            emergencyContact: emergencyPayload,
+          }),
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to update profile in database.');
         }
-      }));
-      setLoading(false);
+
+        setUser(data.user);
+      } else {
+        // Fallback for local-only account
+        setUser(updatedUserObj);
+      }
+
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
-    }, 800);
+    } catch (err) {
+      console.error('Failed to save profile:', err.message);
+      setErrorMsg(err.message || 'Could not connect to database. Changes saved locally.');
+      // Persist locally as fallback
+      setUser(updatedUserObj);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleLogout = () => {
@@ -117,7 +194,10 @@ export default function Profile() {
               <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(231,111,81,0.15)', border: '1px solid rgba(231,111,81,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Phone size={20} color="var(--color-danger)" />
               </div>
-              <h3 style={{ margin: 0, fontSize: '1.1rem' }}>Emergency Contact</h3>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '1.1rem' }}>Emergency Contact</h3>
+                <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--color-text-muted)' }}>Connected to database for crisis prompts & personal safety</p>
+              </div>
             </div>
             <div className="grid-2" style={{ marginBottom: 16 }}>
               <div>
@@ -128,6 +208,10 @@ export default function Profile() {
                 <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--color-text-secondary)', marginBottom: 6 }}>Phone Number</label>
                 <input className="input" type="tel" name="emergencyPhone" value={formData.emergencyPhone} onChange={handleChange} placeholder="+1 234..." />
               </div>
+            </div>
+            <div>
+              <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--color-text-secondary)', marginBottom: 6 }}>Relationship</label>
+              <input className="input" type="text" name="emergencyRelation" value={formData.emergencyRelation} onChange={handleChange} placeholder="e.g. Partner, Parent, Friend" />
             </div>
           </div>
 
@@ -167,8 +251,18 @@ export default function Profile() {
             </div>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
-            {saved && <span style={{ color: 'var(--color-accent)', display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.85rem' }}><Check size={16} /> Saved Successfully</span>}
+          {errorMsg && (
+            <div style={{ padding: '10px 14px', background: 'rgba(231,111,81,0.1)', border: '1px solid rgba(231,111,81,0.3)', borderRadius: 'var(--radius-md)', color: 'var(--color-danger)', fontSize: '0.85rem', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <AlertCircle size={16} /> {errorMsg}
+            </div>
+          )}
+
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, alignItems: 'center' }}>
+            {saved && (
+              <span style={{ color: 'var(--color-accent)', display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.85rem' }}>
+                <Check size={16} /> Saved to Database
+              </span>
+            )}
             <button className="btn btn-primary" onClick={handleSave} disabled={loading} style={{ minWidth: 140 }}>
               {loading ? <span className="spinner" style={{ width: 16, height: 16 }} /> : 'Save Changes'}
             </button>
