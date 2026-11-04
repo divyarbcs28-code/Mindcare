@@ -1,7 +1,7 @@
 services:
   # Node.js Express Backend
   - type: web
-    name: mindcare-backend
+    name: mindcare-api-backend
     runtime: node
     plan: free
     buildCommand: npm install
@@ -17,7 +17,7 @@ services:
 
   # Python FastAPI ML Service
   - type: web
-    name: mindcare-ml-service
+    name: mindcare-ai-service
     runtime: python
     plan: free
     rootDir: ml_service
@@ -30,7 +30,7 @@ services:
 
   # React Frontend (Static Site on Render)
   - type: web
-    name: mindcare-frontend
+    name: mindcare-app-ui
     runtime: static
     buildCommand: npm run build
     staticPublishPath: dist
@@ -42,5 +42,5 @@ services:
       - key: VITE_API_URL
         fromService:
           type: web
-          name: mindcare-backend
+          name: mindcare-api-backend
           property: host
