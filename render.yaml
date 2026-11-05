@@ -8,8 +8,7 @@ services:
     startCommand: node backend/server.js
     healthCheckPath: /api/health
     envVars:
-      - key: MONGO_URI
-        value: mongodb+srv://Divyar:Ramkoki07@cluster0.45vnhds.mongodb.net/mindcare?appName=Cluster0
+      # Keep MONGO_URI configured as a secret in the Render Dashboard, not in source control.
       - key: AUTH_TOKEN_SECRET
         generateValue: true
       - key: PORT
@@ -30,4 +29,4 @@ services:
         fromService:
           type: web
           name: mindcare-api-backend
-          property: host
+          envVarKey: RENDER_EXTERNAL_URL
