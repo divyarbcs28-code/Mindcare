@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Brain, Mail, Lock, Eye, EyeOff, ArrowRight, UserPlus } from 'lucide-react';
 import AuthShell from '../components/shared/AuthShell';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5003';
 
 export default function Login({ onLogin, onGoToRegister }) {
+  const navigate = useNavigate();
   const [form, setForm] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -35,11 +37,12 @@ export default function Login({ onLogin, onGoToRegister }) {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || 'Login failed. Please try again.');
+        setError(data.error || 'Login failed. Please check your credentials.');
         return;
       }
 
       onLogin({ ...data.user, token: data.token });
+      navigate('/', { replace: true });
     } catch (err) {
       setError('Cannot connect to server. Make sure the backend is running.');
     } finally {
@@ -156,6 +159,11 @@ export default function Login({ onLogin, onGoToRegister }) {
                 : <><ArrowRight size={16} /> Sign In</>
               }
             </button>
+            {loading && (
+              <p style={{ textAlign: 'center', fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: 8, marginBottom: 0 }}>
+                Connecting to secure cloud server...
+              </p>
+            )}
           </form>
         </div>
 

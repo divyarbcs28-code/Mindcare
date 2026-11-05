@@ -27,9 +27,9 @@ export default function App() {
       <CursorGlitter />
       <Routes>
         <Route path="/" element={user ? withLayout(<Home userName={user.firstName} />) : <LandingPage />} />
-        <Route path="/login" element={<Login onLogin={handleLoginComplete} onGoToRegister={() => window.location.assign('/register')} />} />
-        <Route path="/register" element={<Register onComplete={handleRegistrationComplete} />} />
-        <Route path="/signup" element={<Register onComplete={handleRegistrationComplete} />} />
+        <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login onLogin={handleLoginComplete} onGoToRegister={() => window.location.assign('/register')} />} />
+        <Route path="/register" element={user ? <Navigate to="/" replace /> : <Register onComplete={handleRegistrationComplete} />} />
+        <Route path="/signup" element={user ? <Navigate to="/" replace /> : <Register onComplete={handleRegistrationComplete} />} />
         <Route path="/reflect" element={withLayout(<VoiceReflection />)} />
         <Route path="/support" element={withLayout(<QuickSupport />)} />
         <Route path="/insights" element={withLayout(<Insights />)} />
